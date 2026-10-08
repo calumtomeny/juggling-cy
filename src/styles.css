@@ -699,20 +699,12 @@ html:not(.js) .hint,
   align-items: center;
 }
 
-.ig-badge {
+.footer-logo {
   display: block;
-  width: clamp(150px, 30vw, 190px);
-  color: var(--ink);
-  border-radius: 50%;
+  width: clamp(120px, 22vw, 170px);
+  height: auto;
+  transform: rotate(-8deg);
 }
-.ig-badge svg { display: block; width: 100%; height: auto; overflow: visible; }
-.ig-badge-bg { fill: var(--bloom); stroke: var(--ink); stroke-width: 3; }
-.ig-badge-ring {
-  transform-origin: 100px 100px;
-  animation: spin 22s linear infinite;
-}
-.ig-badge-ring text { fill: var(--ink); font-family: var(--display); font-weight: 800; }
-@keyframes spin { to { transform: rotate(360deg); } }
 
 .footer-ig { display: grid; gap: 1.1rem; justify-items: start; }
 .footer-ig h2 {
@@ -751,7 +743,6 @@ html:not(.js) .hint,
   font-size: 0.95rem;
   opacity: 0.9;
 }
-.footer-mark { width: 36px; height: 36px; flex: none; }
 .footer-lang { display: grid; gap: 0.6rem; justify-items: start; }
 .feedback { font-size: 0.88rem; }
 .feedback a { color: var(--lemon); text-underline-offset: 3px; }
@@ -808,7 +799,7 @@ html.js .card.reveal.in:hover { transform: rotate(0deg) translateY(-3px); transi
 @media print {
   body, .hero, .welcome, .good, .find, .footer { background: #fff; color: #000; }
   .welcome, .find { clip-path: none; margin-top: 0; }
-  .stage, .bar-nav, .switcher, .hero-actions, .ig-badge, .copy, .welcome-arc { display: none; }
+  .stage, .bar-nav, .switcher, .hero-actions, .footer-logo, .copy, .welcome-arc { display: none; }
   .time, .place, .kopiaste { color: #000; }
   html.js .reveal { opacity: 1; transform: none; }
 }
