@@ -712,7 +712,6 @@ html:not(.js) .hint,
   animation: spin 22s linear infinite;
 }
 .ig-badge-ring text { fill: var(--ink); font-family: var(--display); font-weight: 800; }
-.ig-badge:hover .ig-badge-ring { animation-duration: 6s; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .footer-ig { display: grid; gap: 1.1rem; justify-items: start; }

@@ -76,15 +76,15 @@ function mapSVG(map, t) {
 
 function igBadge(t) {
   const text = t.footer.igRing;
-  return `<a class="ig-badge" href="${INSTAGRAM}" rel="me">
-    <svg viewBox="0 0 200 200" aria-hidden="true">
+  // Decorative: the "Follow" button beside it is the link.
+  return `<div class="ig-badge" aria-hidden="true">
+    <svg viewBox="0 0 200 200">
       <defs><path id="ig-ring" d="M100 22a78 78 0 1 1 0 156a78 78 0 1 1 0-156"/></defs>
       <circle cx="100" cy="100" r="98" class="ig-badge-bg"/>
       <g class="ig-badge-ring"><text font-size="14"><textPath href="#ig-ring" textLength="484" lengthAdjust="spacing">${esc(text)}</textPath></text></g>
       <g transform="translate(70 70) scale(2.5)" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></g>
     </svg>
-    <span class="sr">${esc(t.footer.igCta)}</span>
-  </a>`;
+  </div>`;
 }
 
 function jsonLd(t, lang) {
@@ -302,7 +302,7 @@ ${t.find.steps.map((s) => `            <li>${esc(s)}</li>`).join("\n")}
       ${igBadge(t)}
       <div class="footer-ig">
         <h2>${esc(t.footer.igTitle)}</h2>
-        <a class="btn btn-gold" href="${INSTAGRAM}">${IG_ICON} ${esc(t.footer.igCta)}</a>
+        <a class="btn btn-gold" href="${INSTAGRAM}" rel="me">${IG_ICON} ${esc(t.footer.igCta)}</a>
         <p class="mail">${esc(t.footer.email)}: <a href="mailto:${EMAIL}">${EMAIL}</a></p>
       </div>
       <div class="start">
