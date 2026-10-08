@@ -1,0 +1,21 @@
+{
+  "name": "juggling-cy",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/assets.mjs && vite",
+    "build": "node scripts/assets.mjs && vite build",
+    "preview": "vite preview",
+    "map": "node scripts/map-data.mjs"
+  },
+  "devDependencies": {
+    "@fontsource/syne": "^5.3.0",
+    "@resvg/resvg-js": "^2.6.2",
+    "vite": "^6.4.4",
+    "wawoff2": "^2.0.1"
+  },
+  "dependencies": {
+    "@fontsource-variable/geologica": "^5.3.0",
+    "@fontsource-variable/syne": "^5.3.0"
+  }
+}

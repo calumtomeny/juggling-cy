@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Juggling Cyprus · Free juggling meetup, every Tuesday 7pm in Larnaca",
+    "description": "A free, friendly juggling meetup at Larnaca Skate Park, every Tuesday from 7pm till late. Equipment to borrow, all levels welcome.",
+    "ogTitle": "Juggling Cyprus",
+    "ogDescription": "Every Tuesday from 7pm at Larnaca Skate Park. Free, all welcome.",
+    "ogAlt": "The Juggling Cyprus badge: Cyprus, with three juggling balls thrown between the north coast and Larnaca."
+  },
+  "og": { "line1": "Every Tuesday", "time": "7pm", "line2": "Larnaca Skate Park" },
+  "nav": {
+    "skip": "Skip to content",
+    "good": "Good to know",
+    "find": "Find us",
+    "language": "Language"
+  },
+  "hero": {
+    "kicker": "Free weekly juggling meetup · Larnaca",
+    "day": "Every Tuesday",
+    "time": "7pm",
+    "late": "till late",
+    "cta": "How to find us",
+    "instagram": "Instagram",
+    "hint": "Go on, grab a ball",
+    "pause": "Pause animation",
+    "play": "Play animation"
+  },
+  "countdown": {
+    "fallback": "Every Tuesday from 7pm",
+    "next": "Next: {date} · in {time}",
+    "today": "Today at 7pm · in {time}",
+    "on": "On now. Come and join in!"
+  },
+  "welcome": {
+    "title": "Come and throw things.",
+    "p1": "Juggling Cyprus is a free, drop-in meetup for anyone who likes throwing things in the air. First throws, rusty hands and old tricks are all welcome.",
+    "p2": "Bring a ball if you have one. Empty hands are fine too: there’s plenty to borrow.",
+    "island": "Wherever you’re from, north or south, near or far, there’s a space in the circle for you."
+  },
+  "good": {
+    "title": "Good to know",
+    "items": [
+      { "icon": "clock", "title": "7pm till late", "body": "Come at seven, stay as long as you like." },
+      { "icon": "free", "title": "Always free", "body": "No fees, no sign-up. Just turn up." },
+      { "icon": "kit", "title": "Kit to borrow", "body": "No props? No problem. There’s equipment to borrow on the night." },
+      { "icon": "light", "title": "Lit after dark", "body": "The park is lit, so we keep throwing after sunset." },
+      { "icon": "rain", "title": "Rain?", "body": "If the weather looks doubtful, check {instagram} before you head out." },
+      { "icon": "levels", "title": "All levels", "body": "Never juggled before? Perfect. Been at it for years? Also perfect." }
+    ],
+    "instagram": "our Instagram"
+  },
+  "find": {
+    "title": "Find us",
+    "place": "Larnaca Skate Park",
+    "area": "Mackenzie, by the sea",
+    "steps": [
+      "Head for the Tasos Mitsopoulos car park on the seafront road.",
+      "Walk through to the back of the car park, away from the sea.",
+      "We’re at the skate park, right next to the dog park."
+    ],
+    "comaps": "Open in CoMaps",
+    "google": "Google Maps",
+    "apple": "Apple Maps",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "coords": "Coordinates",
+    "mapLabel": "Map: Larnaca Skate Park sits behind the Tasos Mitsopoulos car park, next to the dog park, a short walk from the beach.",
+    "map": {
+      "sea": "Sea",
+      "beach": "Beach",
+      "carpark": "Car park",
+      "skate": "Skate park",
+      "dog": "Dog park",
+      "road": "Tasou Mitsopoulou",
+      "here": "We’re here"
+    },
+    "attribution": "Map data © OpenStreetMap contributors"
+  },
+  "footer": {
+    "igTitle": "Photos, videos and weather updates",
+    "igCta": "Follow @jugglingcyprus",
+    "igRing": "FOLLOW ALONG · INSTAGRAM · ",
+    "email": "Or email us",
+    "startTitle": "Start a meetup in your town?",
+    "start": "Anywhere on the island, north or south, we’d love to help. Get in touch.",
+    "feedback": "",
+    "tagline": "Every Tuesday · 7pm · Larnaca"
+  }
+}

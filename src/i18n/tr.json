@@ -1,0 +1,88 @@
+{
+  "meta": {
+    "title": "Juggling Cyprus · Ücretsiz jonglör buluşması, her Salı 19:00, Larnaka",
+    "description": "Larnaka Kaykay Parkı’nda her Salı 19:00’dan geç saate kadar ücretsiz, samimi bir jonglör buluşması. Ödünç ekipman var, her seviyeye açık.",
+    "ogTitle": "Juggling Cyprus",
+    "ogDescription": "Her Salı 19:00’dan itibaren Larnaka Kaykay Parkı’nda. Ücretsiz, herkese açık.",
+    "ogAlt": "Juggling Cyprus amblemi: Kıbrıs ve kuzey sahili ile Larnaka arasında atılan üç jonglör topu."
+  },
+  "og": { "line1": "Her Salı", "time": "19:00", "line2": "Larnaka Kaykay Parkı" },
+  "nav": {
+    "skip": "İçeriğe geç",
+    "good": "Bilmekte fayda var",
+    "find": "Bizi bul",
+    "language": "Dil"
+  },
+  "hero": {
+    "kicker": "Ücretsiz haftalık jonglör buluşması · Larnaka",
+    "day": "Her Salı",
+    "time": "19:00",
+    "late": "geç saate kadar",
+    "cta": "Bizi nasıl bulursun",
+    "instagram": "Instagram",
+    "hint": "Hadi, bir top yakala",
+    "pause": "Animasyonu durdur",
+    "play": "Animasyonu oynat"
+  },
+  "countdown": {
+    "fallback": "Her Salı 19:00’dan itibaren",
+    "next": "Sonraki: {date} · {time} sonra",
+    "today": "Bugün 19:00’da · {time} sonra",
+    "on": "Şu an devam ediyor. Gel, katıl!"
+  },
+  "welcome": {
+    "title": "Gel, bir şeyler fırlatalım.",
+    "p1": "Juggling Cyprus, bir şeyleri havaya atmayı seven herkes için ücretsiz ve herkese açık bir buluşma. İlk atışlar, paslanmış eller, eski numaralar: hepsine yer var.",
+    "p2": "Topun varsa getir. Yoksa da sorun değil: ödünç alabileceğin bolca ekipman var.",
+    "island": "Nereden gelirsen gel, kuzeyden ya da güneyden, yakından ya da uzaktan, çemberde sana da yer var."
+  },
+  "good": {
+    "title": "Bilmekte fayda var",
+    "items": [
+      { "icon": "clock", "title": "19:00’dan geç saate kadar", "body": "Yedide gel, istediğin kadar kal." },
+      { "icon": "free", "title": "Her zaman ücretsiz", "body": "Ücret yok, kayıt yok. Sadece gel." },
+      { "icon": "kit", "title": "Ödünç ekipman", "body": "Malzemen yok mu? Sorun değil. Yerinde ödünç alabileceğin ekipman var." },
+      { "icon": "light", "title": "Akşam ışıklı", "body": "Park aydınlatmalı, bu yüzden gün batımından sonra da devam ediyoruz." },
+      { "icon": "rain", "title": "Yağmur mu?", "body": "Hava belirsizse, çıkmadan önce {instagram} bir göz at." },
+      { "icon": "levels", "title": "Her seviye", "body": "Hiç jonglörlük yapmadın mı? Harika. Yıllardır mı yapıyorsun? O da harika." }
+    ],
+    "instagram": "Instagram hesabımıza"
+  },
+  "find": {
+    "title": "Bizi bul",
+    "place": "Larnaka Kaykay Parkı",
+    "area": "Mackenzie, deniz kenarı",
+    "steps": [
+      "Sahil yolundaki Tasos Mitsopoulos otoparkına git.",
+      "Denizden uzaklaşarak otoparkın arka tarafına yürü.",
+      "Kaykay parkındayız, köpek parkının hemen yanında."
+    ],
+    "comaps": "CoMaps’te aç",
+    "google": "Google Maps",
+    "apple": "Apple Haritalar",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
+    "coords": "Koordinatlar",
+    "mapLabel": "Harita: Larnaka Kaykay Parkı, Tasos Mitsopoulos otoparkının arkasında, köpek parkının yanında, plaja birkaç adım mesafede.",
+    "map": {
+      "sea": "Deniz",
+      "beach": "Plaj",
+      "carpark": "Otopark",
+      "skate": "Kaykay parkı",
+      "dog": "Köpek parkı",
+      "road": "Tasou Mitsopoulou",
+      "here": "Buradayız"
+    },
+    "attribution": "Harita verileri © OpenStreetMap katkıda bulunanlar"
+  },
+  "footer": {
+    "igTitle": "Fotoğraflar, videolar ve hava durumu güncellemeleri",
+    "igCta": "@jugglingcyprus’u takip et",
+    "igRing": "BİZİ TAKİP ET · INSTAGRAM · ",
+    "email": "Ya da bize e-posta gönder",
+    "startTitle": "Kendi şehrinde bir buluşma başlatmak ister misin?",
+    "start": "Adanın neresinde olursa olsun, kuzeyde ya da güneyde, yardım etmekten mutluluk duyarız. Bize yaz.",
+    "feedback": "Bu çeviride bir hata mı gördün? Bize haber ver.",
+    "tagline": "Her Salı · 19:00 · Larnaka"
+  }
+}
