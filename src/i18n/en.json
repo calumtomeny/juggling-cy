@@ -6,7 +6,11 @@
     "ogDescription": "Every Tuesday from 7pm at Larnaca Skate Park. Free, all welcome.",
     "ogAlt": "The Juggling Cyprus badge: Cyprus, with three juggling balls thrown between the north coast and Larnaca."
   },
-  "og": { "line1": "Every Tuesday", "time": "7pm", "line2": "Larnaca Skate Park" },
+  "og": {
+    "line1": "Every Tuesday",
+    "time": "7pm",
+    "line2": "Larnaca Skate Park"
+  },
   "nav": {
     "skip": "Skip to content",
     "good": "Good to know",
@@ -22,7 +26,29 @@
     "instagram": "Instagram",
     "hint": "Go on, grab a ball",
     "pause": "Pause animation",
-    "play": "Play animation"
+    "play": "Play animation",
+    "new": "I’m new to juggling and want to try it"
+  },
+  "newbie": {
+    "title": "New to juggling?",
+    "intro": "Perfect. Here’s how your first night goes.",
+    "steps": [
+      {
+        "title": "Turn up at 7pm",
+        "body": "No booking, no sign-up. Just come along to the skate park."
+      },
+      {
+        "title": "Say hi",
+        "body": "Tell someone it’s your first time, and we’ll lend you some balls."
+      },
+      {
+        "title": "Learn your first throws",
+        "body": "Start with one ball, then two, then three. There’s usually someone happy to show you the basics."
+      }
+    ],
+    "note": "Feeling shy? {instagram} and we’ll look out for you.",
+    "noteLink": "Message us on Instagram",
+    "cta": "How to find us"
   },
   "countdown": {
     "fallback": "Every Tuesday from 7pm",
@@ -39,12 +65,36 @@
   "good": {
     "title": "Good to know",
     "items": [
-      { "icon": "clock", "title": "7pm till late", "body": "Come at seven, stay as long as you like." },
-      { "icon": "free", "title": "Always free", "body": "No fees, no sign-up. Just turn up." },
-      { "icon": "kit", "title": "Kit to borrow", "body": "No props? No problem. There’s equipment to borrow on the night." },
-      { "icon": "light", "title": "Lit after dark", "body": "The park is lit, so we keep throwing after sunset." },
-      { "icon": "rain", "title": "Rain?", "body": "If the weather looks doubtful, check {instagram} before you head out." },
-      { "icon": "levels", "title": "All levels", "body": "Never juggled before? Perfect. Been at it for years? Also perfect." }
+      {
+        "icon": "clock",
+        "title": "7pm till late",
+        "body": "Come at seven, stay as long as you like."
+      },
+      {
+        "icon": "free",
+        "title": "Always free",
+        "body": "No fees, no sign-up. Just turn up."
+      },
+      {
+        "icon": "kit",
+        "title": "Kit to borrow",
+        "body": "No props? No problem. There’s equipment to borrow on the night."
+      },
+      {
+        "icon": "light",
+        "title": "Lit after dark",
+        "body": "The park is lit, so we keep throwing after sunset."
+      },
+      {
+        "icon": "rain",
+        "title": "Rain?",
+        "body": "If the weather looks doubtful, check {instagram} before you head out."
+      },
+      {
+        "icon": "levels",
+        "title": "All levels",
+        "body": "Never juggled before? Perfect. Been at it for years? Also perfect."
+      }
     ],
     "instagram": "our Instagram"
   },

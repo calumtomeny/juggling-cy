@@ -6,7 +6,11 @@
     "ogDescription": "Her Salı 19:00’dan itibaren Larnaka Kaykay Parkı’nda. Ücretsiz, herkese açık.",
     "ogAlt": "Juggling Cyprus amblemi: Kıbrıs ve kuzey sahili ile Larnaka arasında atılan üç jonglör topu."
   },
-  "og": { "line1": "Her Salı", "time": "19:00", "line2": "Larnaka Kaykay Parkı" },
+  "og": {
+    "line1": "Her Salı",
+    "time": "19:00",
+    "line2": "Larnaka Kaykay Parkı"
+  },
   "nav": {
     "skip": "İçeriğe geç",
     "good": "Bilmekte fayda var",
@@ -22,7 +26,29 @@
     "instagram": "Instagram",
     "hint": "Hadi, bir top yakala",
     "pause": "Animasyonu durdur",
-    "play": "Animasyonu oynat"
+    "play": "Animasyonu oynat",
+    "new": "Jonglörlükte yeniyim, denemek istiyorum"
+  },
+  "newbie": {
+    "title": "Jonglörlükte yeni misin?",
+    "intro": "Harika. İlk akşamın şöyle geçiyor.",
+    "steps": [
+      {
+        "title": "19:00’da gel",
+        "body": "Rezervasyon yok, kayıt yok. Kaykay parkına gelmen yeterli."
+      },
+      {
+        "title": "Merhaba de",
+        "body": "Birine ilk kez geldiğini söyle, sana birkaç top ödünç verelim."
+      },
+      {
+        "title": "İlk atışlarını öğren",
+        "body": "Önce bir topla başla, sonra iki, sonra üç. Genelde sana temelleri göstermekten mutlu olacak biri olur."
+      }
+    ],
+    "note": "Biraz çekingen misin? {instagram}, seni bekliyor olalım.",
+    "noteLink": "Instagram’dan bize yaz",
+    "cta": "Bizi nasıl bulursun"
   },
   "countdown": {
     "fallback": "Her Salı 19:00’dan itibaren",
@@ -39,12 +65,36 @@
   "good": {
     "title": "Bilmekte fayda var",
     "items": [
-      { "icon": "clock", "title": "19:00’dan geç saate kadar", "body": "Yedide gel, istediğin kadar kal." },
-      { "icon": "free", "title": "Her zaman ücretsiz", "body": "Ücret yok, kayıt yok. Sadece gel." },
-      { "icon": "kit", "title": "Ödünç ekipman", "body": "Malzemen yok mu? Sorun değil. Yerinde ödünç alabileceğin ekipman var." },
-      { "icon": "light", "title": "Akşam ışıklı", "body": "Park aydınlatmalı, bu yüzden gün batımından sonra da devam ediyoruz." },
-      { "icon": "rain", "title": "Yağmur mu?", "body": "Hava belirsizse, çıkmadan önce {instagram} bir göz at." },
-      { "icon": "levels", "title": "Her seviye", "body": "Hiç jonglörlük yapmadın mı? Harika. Yıllardır mı yapıyorsun? O da harika." }
+      {
+        "icon": "clock",
+        "title": "19:00’dan geç saate kadar",
+        "body": "Yedide gel, istediğin kadar kal."
+      },
+      {
+        "icon": "free",
+        "title": "Her zaman ücretsiz",
+        "body": "Ücret yok, kayıt yok. Sadece gel."
+      },
+      {
+        "icon": "kit",
+        "title": "Ödünç ekipman",
+        "body": "Malzemen yok mu? Sorun değil. Yerinde ödünç alabileceğin ekipman var."
+      },
+      {
+        "icon": "light",
+        "title": "Akşam ışıklı",
+        "body": "Park aydınlatmalı, bu yüzden gün batımından sonra da devam ediyoruz."
+      },
+      {
+        "icon": "rain",
+        "title": "Yağmur mu?",
+        "body": "Hava belirsizse, çıkmadan önce {instagram} bir göz at."
+      },
+      {
+        "icon": "levels",
+        "title": "Her seviye",
+        "body": "Hiç jonglörlük yapmadın mı? Harika. Yıllardır mı yapıyorsun? O da harika."
+      }
     ],
     "instagram": "Instagram hesabımıza"
   },

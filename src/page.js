@@ -23,6 +23,8 @@ const PIN_ICON =
   '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>';
 const ARROW_DOWN =
   '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+const ARROW_RIGHT =
+  '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 const ARROW_OUT =
   '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
@@ -195,7 +197,8 @@ ${jsonLd(t, lang, site)}
         </h1>
         <p class="countdown" data-countdown aria-live="polite"><span class="dot" aria-hidden="true"></span><span data-countdown-text>${esc(t.countdown.fallback)}</span></p>
         <div class="hero-actions">
-          <a class="btn btn-gold" href="#find">${esc(t.hero.cta)} ${ARROW_DOWN}</a>
+          <a class="btn btn-gold btn-new" href="#new">${esc(t.hero.new)} ${ARROW_RIGHT}</a>
+          <a class="btn btn-line" href="#find">${esc(t.hero.cta)} ${ARROW_DOWN}</a>
           <a class="btn btn-line" href="${INSTAGRAM}">${IG_ICON} ${esc(t.hero.instagram)}</a>
         </div>
       </div>
@@ -216,6 +219,28 @@ ${jsonLd(t, lang, site)}
   </header>
 
   <main id="main">
+    <section class="newbie" id="new" aria-labelledby="new-title">
+      <div class="wrap">
+        <h2 id="new-title" class="section-title reveal">${esc(t.newbie.title)}</h2>
+        <p class="newbie-intro reveal">${esc(t.newbie.intro)}</p>
+        <ol class="newbie-steps">
+${t.newbie.steps
+  .map(
+    (step, i) => `          <li class="newbie-step reveal" style="--i:${i};--c:${BALL_COLORS[i]}">
+            <span class="newbie-ball" aria-hidden="true">${i + 1}</span>
+            <h3>${esc(step.title)}</h3>
+            <p>${esc(step.body)}</p>
+          </li>`
+  )
+  .join("\n")}
+        </ol>
+        <div class="newbie-end reveal">
+          <a class="btn btn-gold" href="#find">${esc(t.newbie.cta)} ${ARROW_DOWN}</a>
+          <p>${esc(t.newbie.note).replace("{instagram}", `<a href="${INSTAGRAM}">${esc(t.newbie.noteLink)}</a>`)}</p>
+        </div>
+      </div>
+    </section>
+
     <section class="welcome" aria-labelledby="welcome-title">
       <svg class="welcome-arc" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true"><path d="M-40 380C260 -40 900 -60 1240 330"/></svg>
       <div class="wrap welcome-grid">
