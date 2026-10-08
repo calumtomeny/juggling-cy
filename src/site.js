@@ -2,7 +2,14 @@
 export const PIN = { lat: 34.89736, lon: 33.63717 };
 export const TZ = "Asia/Nicosia";
 export const START_HOUR = 19;
-export const ORIGIN = "https://juggling.cy";
+
+// Where the site is served. The deploy workflow passes the GitHub Pages URL
+// in SITE_URL (e.g. https://calumtomeny.github.io/juggling-cy, which lives
+// under a sub-path); otherwise it is the real domain, at the root.
+export function deployment(env = {}) {
+  const url = (env.SITE_URL || "https://juggling.cy").replace(/\/$/, "");
+  return { url, base: new URL(url + "/").pathname };
+}
 export const EMAIL = "jugglingcyprus@gmail.com";
 export const INSTAGRAM = "https://www.instagram.com/jugglingcyprus/";
 

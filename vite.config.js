@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { writePages, PAGES } from "./scripts/pages.mjs";
+import { deployment } from "./src/site.js";
 
 const pages = {
   name: "pages",
@@ -17,6 +18,7 @@ const pages = {
 };
 
 export default defineConfig({
+  base: deployment(process.env).base,
   plugins: [pages],
   build: {
     rollupOptions: { input: Object.values(PAGES) },

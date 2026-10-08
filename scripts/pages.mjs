@@ -1,6 +1,7 @@
 // Writes index.html, el/index.html and tr/index.html from src/page.js and the
 // translation files. Vite then treats them as the site's three entry pages.
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { deployment } from "../src/site.js";
 
 const root = new URL("../", import.meta.url);
 export const PAGES = { en: "index.html", el: "el/index.html", tr: "tr/index.html" };
@@ -14,6 +15,6 @@ export async function writePages() {
     const t = JSON.parse(await readFile(new URL(`src/i18n/${lang}.json`, root), "utf8"));
     const out = new URL(file, root);
     await mkdir(new URL(".", out), { recursive: true });
-    await writeFile(out, renderPage(t, lang, map));
+    await writeFile(out, renderPage(t, lang, map, deployment(process.env)));
   }
 }

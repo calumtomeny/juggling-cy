@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { Resvg } from "@resvg/resvg-js";
 import wawoff2 from "wawoff2";
 import { badgeSVG, markSVG, COLORS } from "../src/badge.js";
-import { LANGS, ORIGIN } from "../src/site.js";
+import { LANGS, deployment } from "../src/site.js";
 
 const require = createRequire(import.meta.url);
 const root = new URL("../", import.meta.url);
@@ -76,14 +76,17 @@ for (const { code } of LANGS) {
   await writeFile(new URL(`og-${code}.png`, pub), png(ogSVG(t), 1200));
 }
 
-const alternates = LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l.code}" href="${ORIGIN + l.path}"/>`).join("\n");
+const { url: site } = deployment(process.env);
+const alternates = LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l.code}" href="${site + l.path}"/>`).join("\n");
 await writeFile(
   new URL("sitemap.xml", pub),
   `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${LANGS.map((l) => `  <url>\n    <loc>${ORIGIN + l.path}</loc>\n${alternates}\n  </url>`).join("\n")}
+${LANGS.map((l) => `  <url>\n    <loc>${site + l.path}</loc>\n${alternates}\n  </url>`).join("\n")}
 </urlset>
 `
 );
 
-console.log("assets: favicon, touch icon, share images, sitemap");
+await writeFile(new URL("robots.txt", pub), `User-agent: *\nAllow: /\nSitemap: ${site}/sitemap.xml\n`);
+
+console.log("assets: favicon, touch icon, share images, sitemap, robots.txt");

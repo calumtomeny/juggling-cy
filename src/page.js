@@ -1,7 +1,7 @@
 // Renders one language's page to an HTML string. scripts/pages.mjs writes the
 // result to index.html, el/index.html and tr/index.html for Vite to build.
 import { badgeSVG, markSVG, BALL_COLORS, COLORS } from "./badge.js";
-import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, ORIGIN, PIN, TZ, START_HOUR } from "./site.js";
+import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR } from "./site.js";
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -26,10 +26,10 @@ const ARROW_DOWN =
 const ARROW_OUT =
   '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
 
-function switcher(lang, t, cls) {
+function switcher(lang, t, cls, base) {
   const links = LANGS.map(
     (l) =>
-      `<a href="${l.path}" hreflang="${l.code}" lang="${l.code}" data-lang="${l.code}"${l.code === lang ? ' aria-current="page"' : ""}>${l.label}</a>`
+      `<a href="${base + l.path.slice(1)}" hreflang="${l.code}" lang="${l.code}" data-lang="${l.code}"${l.code === lang ? ' aria-current="page"' : ""}>${l.label}</a>`
   ).join("");
   return `<nav class="switcher ${cls}" aria-label="${esc(t.nav.language)}">${links}</nav>`;
 }
@@ -87,18 +87,18 @@ function igBadge(t) {
   </div>`;
 }
 
-function jsonLd(t, lang) {
+function jsonLd(t, lang, site) {
   const data = {
     "@context": "https://schema.org",
     "@type": "Event",
     name: "Juggling Cyprus",
     description: t.meta.description,
-    url: ORIGIN + LANGS.find((l) => l.code === lang).path,
+    url: site + LANGS.find((l) => l.code === lang).path,
     inLanguage: lang,
     isAccessibleForFree: true,
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     eventStatus: "https://schema.org/EventScheduled",
-    image: `${ORIGIN}/og-${lang}.png`,
+    image: `${site}/og-${lang}.png`,
     eventSchedule: {
       "@type": "Schedule",
       repeatFrequency: "P1W",
@@ -120,7 +120,7 @@ function jsonLd(t, lang) {
     organizer: {
       "@type": "Organization",
       name: "Juggling Cyprus",
-      url: ORIGIN + "/",
+      url: site + "/",
       email: EMAIL,
       sameAs: INSTAGRAM,
     },
@@ -128,9 +128,10 @@ function jsonLd(t, lang) {
   return JSON.stringify(data, null, 2).replace(/</g, "\\u003c");
 }
 
-export function renderPage(t, lang, map) {
+export function renderPage(t, lang, map, { url: site, base }) {
   const L = LANGS.find((l) => l.code === lang);
-  const url = ORIGIN + L.path;
+  const url = site + L.path;
+  const home = base + L.path.slice(1);
   const coords = `${PIN.lat}, ${PIN.lon}`;
   const runtime = {
     lang,
@@ -147,7 +148,7 @@ export function renderPage(t, lang, map) {
   // On the English home page only: send returning visitors to the language they picked.
   const remember =
     lang === "en"
-      ? `try{var l=localStorage.getItem("jc-lang");if((l==="el"||l==="tr")&&location.pathname==="/"&&!location.hash)location.replace("/"+l+"/")}catch(e){}`
+      ? `try{var l=localStorage.getItem("jc-lang");if((l==="el"||l==="tr")&&location.pathname===${JSON.stringify(base)}&&!location.hash)location.replace(${JSON.stringify(base)}+l+"/")}catch(e){}`
       : "";
 
   return `<!doctype html>
@@ -160,27 +161,27 @@ export function renderPage(t, lang, map) {
   <meta name="description" content="${esc(t.meta.description)}">
   <meta name="theme-color" content="${COLORS.sea}">
   <link rel="canonical" href="${url}">
-${LANGS.map((l) => `  <link rel="alternate" hreflang="${l.code}" href="${ORIGIN + l.path}">`).join("\n")}
-  <link rel="alternate" hreflang="x-default" href="${ORIGIN}/">
+${LANGS.map((l) => `  <link rel="alternate" hreflang="${l.code}" href="${site + l.path}">`).join("\n")}
+  <link rel="alternate" hreflang="x-default" href="${site}/">
   <meta property="og:title" content="${esc(t.meta.ogTitle)}">
   <meta property="og:description" content="${esc(t.meta.ogDescription)}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="${url}">
   <meta property="og:locale" content="${L.og}">
 ${LANGS.filter((l) => l.code !== lang).map((l) => `  <meta property="og:locale:alternate" content="${l.og}">`).join("\n")}
-  <meta property="og:image" content="${ORIGIN}/og-${lang}.png">
+  <meta property="og:image" content="${site}/og-${lang}.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="${esc(t.meta.ogAlt)}">
   <meta name="twitter:card" content="summary_large_image">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
   <script>document.documentElement.classList.add("js");${remember}</script>
   <link rel="stylesheet" href="/src/styles.css">
   <script type="module" src="/src/app.js"></script>
   <script type="application/ld+json">
-${jsonLd(t, lang)}
+${jsonLd(t, lang, site)}
   </script>
   <script type="application/json" id="i18n">${JSON.stringify(runtime).replace(/</g, "\\u003c")}</script>
 </head>
@@ -189,12 +190,12 @@ ${jsonLd(t, lang)}
 
   <header class="hero" id="top">
     <div class="bar wrap">
-      <a class="brand" href="${L.path}">${markSVG({ attrs: 'class="brand-mark" aria-hidden="true"' })}<span>Juggling Cyprus</span></a>
+      <a class="brand" href="${home}">${markSVG({ attrs: 'class="brand-mark" aria-hidden="true"' })}<span>Juggling Cyprus</span></a>
       <nav class="bar-nav" aria-label="Juggling Cyprus">
         <a href="#good">${esc(t.nav.good)}</a>
         <a href="#find">${esc(t.nav.find)}</a>
       </nav>
-      ${switcher(lang, t, "switcher-top")}
+      ${switcher(lang, t, "switcher-top", base)}
     </div>
 
     <div class="hero-grid wrap">
@@ -314,7 +315,7 @@ ${t.find.steps.map((s) => `            <li>${esc(s)}</li>`).join("\n")}
     <div class="wrap footer-bottom">
       <p class="footer-sign">${markSVG({ attrs: 'class="footer-mark" aria-hidden="true"' })}<span>Juggling Cyprus · ${esc(t.footer.tagline)}</span></p>
       <div class="footer-lang">
-        ${switcher(lang, t, "switcher-bottom")}
+        ${switcher(lang, t, "switcher-bottom", base)}
         ${feedback}
       </div>
     </div>
