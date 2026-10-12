@@ -110,10 +110,13 @@ html:not(.js) .js-only { display: none !important; }
   color: var(--ink);
   box-shadow: 4px 4px 0 var(--deep);
 }
-.btn-gold:hover {
-  background: #ffd56a;
-  transform: translate(-1px, -1px);
-  box-shadow: 6px 6px 0 var(--deep);
+/* Hover lifts only where there's a pointer, so they don't stick after a tap. */
+@media (hover: hover) {
+  .btn-gold:hover {
+    background: #ffd56a;
+    transform: translate(-1px, -1px);
+    box-shadow: 6px 6px 0 var(--deep);
+  }
 }
 .btn-gold:active {
   transform: translate(3px, 3px);
@@ -258,13 +261,18 @@ html:not(.js) .js-only { display: none !important; }
   transform: rotate(-7deg);
 }
 
+.next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.7rem 0.9rem;
+  margin-top: 1.6rem;
+}
+
 .countdown {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  justify-self: start;
-  width: fit-content;
-  margin-top: 1.6rem;
   padding: 0.55rem 1.05rem 0.6rem;
   border: 2px solid rgb(247 244 236 / 0.22);
   border-radius: 999px;
@@ -291,6 +299,54 @@ html:not(.js) .js-only { display: none !important; }
   animation: blink 1.2s ease-in-out infinite;
 }
 @keyframes blink { 50% { opacity: 0.25; } }
+
+/* Add to calendar: a small menu that opens under its button. */
+.cal { position: relative; }
+.cal summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.45rem 0.95rem;
+  border: 2px solid rgb(247 244 236 / 0.4);
+  border-radius: 999px;
+  color: var(--foam);
+  font-weight: 700;
+  font-size: 0.95rem;
+  list-style: none;
+  cursor: pointer;
+}
+.cal summary::-webkit-details-marker { display: none; }
+.cal summary svg { color: var(--gold); }
+.cal[open] summary { border-color: var(--gold); }
+.cal-menu {
+  position: absolute;
+  top: calc(100% + 0.6rem);
+  left: 0;
+  z-index: 5;
+  display: grid;
+  min-width: 100%;
+  padding: 0.4rem;
+  border: 3px solid var(--deep);
+  border-radius: 20px;
+  background: var(--paper);
+  box-shadow: 5px 5px 0 var(--deep);
+  --focus: var(--ink);
+}
+.cal-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 12px;
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.cal-menu a:hover { background: var(--sand); }
+.cal-menu svg { flex: none; color: var(--muted); }
 
 .hero-actions {
   display: flex;
@@ -341,20 +397,20 @@ html:not(.js) .js-only { display: none !important; }
   to { transform: scale(1.9); opacity: 0; }
 }
 
+/* Below the badge, pointing up at it; beside it on wide screens. */
 .hint {
-  position: absolute;
-  left: -0.5rem;
-  bottom: 4%;
   display: flex;
   align-items: flex-start;
+  justify-content: center;
   gap: 0.2rem;
+  margin-top: 0.4rem;
   color: var(--lemon);
   font: 700 1rem/1.2 var(--body);
-  transform: rotate(-6deg);
+  transform: rotate(-3deg);
   pointer-events: none;
   transition: opacity 0.4s ease;
 }
-.hint svg { margin-top: -0.6rem; transform: scaleY(-1) rotate(10deg); }
+.hint svg { order: -1; margin-top: -0.9rem; transform: scale(-1, -1) rotate(10deg); }
 html:not(.js) .hint,
 .stage.touched .hint { opacity: 0; }
 
@@ -524,6 +580,7 @@ html:not(.js) .hint,
   gap: 0.75rem;
   font: 800 clamp(1.35rem, 3.6vw, 2.2rem)/1.15 var(--display);
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 .ball-dot {
   width: 0.72em;
@@ -584,9 +641,11 @@ html:not(.js) .hint,
 .card:nth-child(6n + 4) { --c: var(--gold); }
 .card:nth-child(6n + 5) { --c: var(--sea); --ic: var(--foam); }
 .card:nth-child(6n + 6) { --c: var(--olive); --ic: var(--foam); }
-.card:hover {
-  transform: rotate(0deg) translateY(-3px);
-  box-shadow: 8px 9px 0 var(--deep);
+@media (hover: hover) {
+  .card:hover {
+    transform: rotate(0deg) translateY(-3px);
+    box-shadow: 8px 9px 0 var(--deep);
+  }
 }
 
 .card-icon {
@@ -718,8 +777,22 @@ html:not(.js) .hint,
   box-shadow: 10px 10px 0 var(--deep);
   --tilt: 0.8deg;
   transform: rotate(var(--tilt));
+  container-type: inline-size;
 }
+.map-frame { position: relative; }
 .map { display: block; width: 100%; height: auto; }
+.map-tag {
+  position: absolute;
+  /* Centred over the pin, clear of its dot at any size. */
+  transform: translate(-50%, calc(-100% - 2.4cqi));
+  padding: 0.45em 0.95em 0.5em;
+  border-radius: 999px;
+  background: var(--deep);
+  color: var(--foam);
+  font: 800 clamp(0.72rem, 2.3cqi, 0.9rem)/1 var(--display);
+  white-space: nowrap;
+  pointer-events: none;
+}
 .map-card figcaption {
   padding: 0.55rem 1rem 0.65rem;
   border-top: 3px solid var(--deep);
@@ -756,15 +829,24 @@ html:not(.js) .hint,
   letter-spacing: 0.2em;
   text-transform: uppercase;
   font-size: 13px;
+  dominant-baseline: central;
 }
 .map-label.road-label {
   fill: var(--foam);
-  stroke: none;
+  stroke: #3b4540;
+  stroke-width: 4px;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.06em;
+  dominant-baseline: central;
 }
-.map-here { fill: var(--foam); font: 800 14px var(--display); }
+/* On a phone the map is drawn at half size, so its labels need to be bigger. */
+@container (max-width: 520px) {
+  .map-label { font-size: 21px; stroke-width: 6px; }
+  .map-label.strong { font-size: 22px; }
+  .map-label.on-sea { font-size: 17px; }
+  .map-label.road-label { font-size: 16px; }
+}
 .map-pin-pulse {
   fill: var(--bloom);
   opacity: 0.4;
@@ -849,7 +931,30 @@ html.js .reveal.in {
   opacity: 1;
   transform: rotate(var(--tilt, 0deg));
 }
-html.js .card.reveal.in:hover { transform: rotate(0deg) translateY(-3px); transition-delay: 0s; }
+@media (hover: hover) {
+  html.js .card.reveal.in:hover { transform: rotate(0deg) translateY(-3px); transition-delay: 0s; }
+}
+
+/* ---------- Small phones ---------- */
+
+/* Keep the logo and all three languages on one line, however narrow. */
+@media (max-width: 420px) {
+  .bar { gap: 0.75rem; }
+  .brand { gap: 0.55rem; font-size: 1rem; }
+  .brand-mark { width: 40px; height: 40px; }
+  .switcher-top a { min-width: 0; padding-inline: 0.5rem; font-size: 0.8rem; }
+}
+/* The very smallest phones show the logo without its name (still read out). */
+@media (max-width: 350px) {
+  .brand span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+}
 
 /* ---------- Larger screens ---------- */
 
@@ -880,6 +985,14 @@ html.js .card.reveal.in:hover { transform: rotate(0deg) translateY(-3px); transi
     padding-top: 1rem;
   }
   .stage { width: 100%; }
+  .hint {
+    position: absolute;
+    left: -0.5rem;
+    bottom: 4%;
+    margin: 0;
+    transform: rotate(-6deg);
+  }
+  .hint svg { order: 0; margin-top: -0.6rem; transform: scaleY(-1) rotate(10deg); }
   .find-grid { grid-template-columns: 0.85fr 1.15fr; }
 }
 
@@ -900,7 +1013,7 @@ html.js .card.reveal.in:hover { transform: rotate(0deg) translateY(-3px); transi
   body, .hero, .welcome, .good, .find, .footer { background: #fff; color: #000; }
   .welcome, .find { clip-path: none; margin-top: 0; }
   .newbie { clip-path: none; margin-top: 0; }
-  .stage, .bar-nav, .switcher, .hero-actions, .footer-logo, .copy, .welcome-arc { display: none; }
+  .stage, .bar-nav, .switcher, .hero-actions, .cal, .footer-logo, .copy, .welcome-arc { display: none; }
   .time, .place, .kopiaste { color: #000; }
   html.js .reveal { opacity: 1; transform: none; }
 }

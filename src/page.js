@@ -1,7 +1,7 @@
 // Renders one language's page to an HTML string. scripts/pages.mjs writes the
 // result to index.html, el/index.html and tr/index.html for Vite to build.
 import { badgeSVG, markSVG, BALL_COLORS, COLORS } from "./badge.js";
-import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR } from "./site.js";
+import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR, RRULE, calendarEvent, icsFile } from "./site.js";
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -27,6 +27,13 @@ const ARROW_RIGHT =
   '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
 const ARROW_OUT =
   '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>';
+const CAL_ICON =
+  '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>';
+
+function googleCalendar(e) {
+  const query = { action: "TEMPLATE", text: e.title, dates: `${e.start}/${e.end}`, ctz: TZ, recur: `RRULE:${RRULE}`, location: e.location, details: e.details };
+  return "https://calendar.google.com/calendar/render?" + Object.entries(query).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
+}
 
 function switcher(lang, t, cls, base) {
   const links = LANGS.map(
@@ -36,11 +43,28 @@ function switcher(lang, t, cls, base) {
   return `<nav class="switcher ${cls}" aria-label="${esc(t.nav.language)}">${links}</nav>`;
 }
 
+// The map, with its "We're here" tag laid over it in HTML so the tag fits its
+// text in every language and stays readable however small the map is drawn.
+function mapFrame(map, t) {
+  const [px, py] = map.pin;
+  const at = `left:${((px / map.width) * 100).toFixed(2)}%;top:${((py / map.height) * 100).toFixed(2)}%`;
+  return `<div class="map-frame">
+            ${mapSVG(map, t)}
+            <span class="map-tag" style="${at}" aria-hidden="true">${esc(t.find.map.here)}</span>
+          </div>`;
+}
+
 function mapSVG(map, t) {
   const m = t.find.map;
   const [px, py] = map.pin;
   const label = ([x, y], text, anchor = "middle", cls = "") =>
     `<text x="${x}" y="${y}" text-anchor="${anchor}" class="map-label ${cls}">${esc(text)}</text>`;
+  // Two-word names go on two lines, so they fit beside the parks on a phone.
+  const stacked = ([x, y], text, cls = "") => {
+    const lines = text.split(/ (?=\S+$)/);
+    const tspans = lines.map((line, i) => `<tspan x="${x}" dy="${i ? 1.1 : -0.55 * (lines.length - 1)}em">${esc(line)}</tspan>`);
+    return `<text y="${y}" text-anchor="end" class="map-label ${cls}">${tspans.join("")}</text>`;
+  };
   return `<svg class="map" viewBox="0 0 ${map.width} ${map.height}" role="img" aria-label="${esc(t.find.mapLabel)}">
   <defs>
     <marker id="walk-arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="${COLORS.deep}"/></marker>
@@ -59,19 +83,15 @@ function mapSVG(map, t) {
   <path d="${map.dog}" class="map-dog"/>
   <path d="${map.skate}" class="map-skate"/>
   <path d="${map.walk}" class="map-walk" marker-end="url(#walk-arrow)"/>
-  ${label(map.labels.sea, m.sea, "middle", "on-sea")}
+  <text class="map-label on-sea" transform="translate(${map.labels.sea}) rotate(90)" text-anchor="middle">${esc(m.sea)}</text>
   ${label(map.labels.beach, m.beach)}
   ${label(map.labels.carpark, m.carpark)}
-  ${label(map.labels.skate, m.skate, "end", "strong")}
-  ${label(map.labels.dog, m.dog, "end")}
-  <text class="map-label road-label" transform="translate(${map.labels.road}) rotate(86)" text-anchor="middle">${esc(m.road)}</text>
+  ${stacked(map.labels.skate, m.skate, "strong")}
+  ${stacked(map.labels.dog, m.dog)}
+  <text class="map-label road-label" transform="translate(${map.labels.road}) rotate(85)" text-anchor="middle">${esc(m.road)}</text>
   <g class="map-pin" transform="translate(${px} ${py})">
     <circle r="16" class="map-pin-pulse"/>
     <circle r="9" fill="${COLORS.bloom}" stroke="${COLORS.deep}" stroke-width="3.5"/>
-    <g transform="translate(0 -26)">
-      <rect x="-58" y="-22" width="116" height="32" rx="16" fill="${COLORS.deep}"/>
-      <text y="0" text-anchor="middle" class="map-here">${esc(m.here)}</text>
-    </g>
   </g>
 </svg>`;
 }
@@ -122,6 +142,7 @@ export function renderPage(t, lang, map, { url: site, base }) {
   const url = site + L.path;
   const home = base + L.path.slice(1);
   const coords = `${PIN.lat}, ${PIN.lon}`;
+  const event = calendarEvent(t, url);
   const runtime = {
     lang,
     locale: L.locale,
@@ -195,7 +216,16 @@ ${jsonLd(t, lang, site)}
           <span class="day">${esc(t.hero.day)}</span>
           <span class="time-row"><span class="time">${esc(t.hero.time)}</span><span class="late">${esc(t.hero.late)}</span></span>
         </h1>
-        <p class="countdown" data-countdown aria-live="polite"><span class="dot" aria-hidden="true"></span><span data-countdown-text>${esc(t.countdown.fallback)}</span></p>
+        <div class="next">
+          <p class="countdown" data-countdown><span class="dot" aria-hidden="true"></span><span data-countdown-text>${esc(t.countdown.fallback)}</span></p>
+          <details class="cal" data-cal>
+            <summary>${CAL_ICON} ${esc(t.calendar.add)}</summary>
+            <div class="cal-menu">
+              <a href="${esc(googleCalendar(event))}">${esc(t.calendar.google)} ${ARROW_OUT}</a>
+              <a href="${base + icsFile(lang)}">${esc(t.calendar.other)} ${ARROW_OUT}</a>
+            </div>
+          </details>
+        </div>
         <div class="hero-actions">
           <a class="btn btn-gold btn-new" href="#new">${esc(t.hero.new)} ${ARROW_RIGHT}</a>
           <a class="btn btn-line" href="#find">${esc(t.hero.cta)} ${ARROW_DOWN}</a>
@@ -303,7 +333,7 @@ ${t.find.steps.map((s) => `            <li>${esc(s)}</li>`).join("\n")}
           </p>
         </div>
         <figure class="map-card reveal">
-          ${mapSVG(map, t)}
+          ${mapFrame(map, t)}
           <figcaption>${esc(t.find.attribution).replace("OpenStreetMap", '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>')}</figcaption>
         </figure>
       </div>

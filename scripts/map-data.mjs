@@ -78,12 +78,12 @@ const map = {
   walk: d([metres([103, 43]), metres([12, 43]), metres([3, 30])]),
   pin: project(PIN),
   labels: {
-    road: metres([118, -40]),
+    road: metres([103, -22.5]), // on the road's centre line
     carpark: metres([50, 90]),
     skate: metres([-35, 26]),
     dog: metres([-34, 88]),
     beach: metres([182, 110]),
-    sea: metres([214, -30]),
+    sea: metres([212, 25]), // runs down the sea, so any language fits
   },
 };
 

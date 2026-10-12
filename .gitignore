@@ -9,3 +9,4 @@ dist/
 /public/apple-touch-icon.png
 /public/sitemap.xml
 /public/robots.txt
+/public/*.ics

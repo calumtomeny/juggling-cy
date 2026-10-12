@@ -85,6 +85,20 @@ if (countdown) {
   document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && tick());
 }
 
+// ---------- Add to calendar menu: close on Escape or a click elsewhere ----------
+
+for (const menu of document.querySelectorAll("[data-cal]")) {
+  document.addEventListener("click", (e) => {
+    if (menu.open && !menu.contains(e.target)) menu.open = false;
+  });
+  menu.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu.open) {
+      menu.open = false;
+      menu.querySelector("summary").focus();
+    }
+  });
+}
+
 // ---------- The badge: rotating ring and throwable balls ----------
 
 const stage = document.querySelector(".stage");

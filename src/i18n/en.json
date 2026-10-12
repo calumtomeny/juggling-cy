@@ -56,6 +56,11 @@
     "today": "Today at 7pm · in {time}",
     "on": "On now. Come and join in!"
   },
+  "calendar": {
+    "add": "Add to calendar",
+    "google": "Google Calendar",
+    "other": "Apple, Outlook and others"
+  },
   "welcome": {
     "title": "Come and throw things.",
     "p1": "Juggling Cyprus is a free, drop-in meetup for anyone who likes throwing things in the air. First throws, rusty hands and old tricks are all welcome.",

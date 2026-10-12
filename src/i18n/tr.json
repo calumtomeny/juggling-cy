@@ -56,6 +56,11 @@
     "today": "Bugün 19:00’da · {time} sonra",
     "on": "Şu an devam ediyor. Gel, katıl!"
   },
+  "calendar": {
+    "add": "Takvime ekle",
+    "google": "Google Takvim",
+    "other": "Apple, Outlook ve diğerleri"
+  },
   "welcome": {
     "title": "Gel, bir şeyler fırlatalım.",
     "p1": "Juggling Cyprus, bir şeyleri havaya atmayı seven herkes için ücretsiz ve herkese açık bir buluşma. İlk atışlar, paslanmış eller, eski numaralar: hepsine yer var.",
