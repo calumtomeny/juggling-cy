@@ -1,4 +1,4 @@
-import { ballPosition, BOUNDS, BALL_R } from "./badge.js";
+import { ballPosition, ballScale, shadowOffset, BOUNDS, BALL_R, STILL_T } from "./badge.js";
 import { TZ, START_HOUR } from "./site.js";
 
 const T = JSON.parse(document.getElementById("i18n").textContent);
@@ -114,10 +114,12 @@ if (svg) {
   const BOUNCE = 0.72;
   const FREE_FOR = 1.6;  // seconds a thrown ball flies before rejoining
   const REJOIN = 0.55;   // seconds to glide back into the pattern
+  const HELD = 0.6;      // how high a ball in your fingers is lifted
+  const LOOSE = 0.3;     // and one bouncing round the badge
   const R = BOUNDS.r - BALL_R;
 
   let playing = !reducedMotion && store.get("jc-motion") !== "off";
-  let clock = 0;          // pattern time, frozen while paused
+  let clock = STILL_T;    // pattern time, frozen while paused
   let spin = 0;           // idle ring rotation in degrees
   let visible = true;
   let last = 0;
@@ -128,12 +130,21 @@ if (svg) {
     hit.setAttribute("r", String(BALL_R * 2.3));
     hit.setAttribute("class", "ball-hit");
     el.append(hit);
-    const [x, y] = ballPosition(clock, i);
-    return { el, i, mode: "loop", x, y, vx: 0, vy: 0, t: 0, from: null, pointer: null };
+    const [x, y, h] = ballPosition(clock, i);
+    const shadow = el.querySelector(".ball-shadow"), body = el.querySelector(".ball-body");
+    return { el, shadow, body, i, mode: "loop", x, y, h, vx: 0, vy: 0, t: 0, from: null, pointer: null };
   });
 
   const toIsland = (e) => new DOMPoint(e.clientX, e.clientY).matrixTransform(island.getScreenCTM().inverse());
-  const place = (b) => b.el.setAttribute("transform", `translate(${b.x.toFixed(1)} ${b.y.toFixed(1)})`);
+  function place(b) {
+    const [sx, sy] = shadowOffset(b.h);
+    b.el.setAttribute("transform", `translate(${b.x.toFixed(1)} ${b.y.toFixed(1)})`);
+    b.shadow.setAttribute("cx", sx.toFixed(1));
+    b.shadow.setAttribute("cy", sy.toFixed(1));
+    b.body.setAttribute("transform", `scale(${ballScale(b.h).toFixed(3)})`);
+  }
+  // Ease a ball's height towards a target, for balls out of the pattern.
+  const rise = (b, to, dt) => (b.h += (to - b.h) * Math.min(1, dt * 10));
 
   function setPlaying(on) {
     playing = on;
@@ -153,8 +164,11 @@ if (svg) {
     }
     for (const b of balls) {
       if (b.mode === "loop") {
-        [b.x, b.y] = ballPosition(clock, b.i);
+        [b.x, b.y, b.h] = ballPosition(clock, b.i);
+      } else if (b.mode === "held") {
+        rise(b, HELD, dt);
       } else if (b.mode === "free") {
+        rise(b, LOOSE, dt);
         b.t += dt;
         b.vy += GRAVITY * dt;
         b.x += b.vx * dt;
@@ -170,13 +184,12 @@ if (svg) {
           b.x = BOUNDS.cx + nx * R;
           b.y = BOUNDS.cy + ny * R;
         }
-        if (b.t > FREE_FOR) Object.assign(b, { mode: "rejoin", t: 0, from: [b.x, b.y] });
+        if (b.t > FREE_FOR) Object.assign(b, { mode: "rejoin", t: 0, from: [b.x, b.y, b.h] });
       } else if (b.mode === "rejoin") {
         b.t += dt;
         const k = Math.min(1, b.t / REJOIN), e = k * k * (3 - 2 * k);
-        const [tx, ty] = ballPosition(clock, b.i);
-        b.x = b.from[0] + (tx - b.from[0]) * e;
-        b.y = b.from[1] + (ty - b.from[1]) * e;
+        const to = ballPosition(clock, b.i);
+        [b.x, b.y, b.h] = b.from.map((v, j) => v + (to[j] - v) * e);
         if (k === 1) b.mode = "loop";
       }
       place(b);

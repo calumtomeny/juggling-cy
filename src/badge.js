@@ -48,33 +48,52 @@ export const FLIGHT = 0.85;
 export const DWELL = 0.35;
 export const PERIOD = 2 * (FLIGHT + DWELL);
 
-const quad = (a, c, b, u) => [
+// A throw: along the arc, rising off the map towards you and falling back.
+const flight = (a, c, b, u) => [
   (1 - u) * (1 - u) * a[0] + 2 * (1 - u) * u * c[0] + u * u * b[0],
   (1 - u) * (1 - u) * a[1] + 2 * (1 - u) * u * c[1] + u * u * b[1],
+  4 * u * (1 - u),
 ];
-const scoop = (a, b, v, lift) => [a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v + Math.sin(Math.PI * v) * lift];
+// A carry through a hand. The hand takes the ball at speed, slows it almost to
+// a stop as it dips, then whips it into the next throw.
+const carry = (v) => v + (0.85 * Math.sin(2 * Math.PI * v)) / (2 * Math.PI);
+const scoop = (a, b, v, lift) => {
+  const e = carry(v);
+  return [a[0] + (b[0] - a[0]) * e, a[1] + (b[1] - a[1]) * e + Math.sin(Math.PI * e) * lift, -0.15 * Math.sin(Math.PI * e)];
+};
 
-// Position of ball i (0–2) at time t seconds, in island units. A quadratic
-// Bézier walked at constant speed is a true parabola, so the throws look right.
+// Ball i (0–2) at time t seconds: [x, y] in island units, and its height, 0 in
+// a hand and 1 at the top of a throw. A quadratic Bézier walked at constant
+// speed is a true parabola, and so is the height, so the throws look right.
 export function ballPosition(t, i) {
   let p = (((t + (i * PERIOD) / 3) % PERIOD) + PERIOD) % PERIOD;
-  if (p < FLIGHT) return quad(S_THROW, WEST, N_CATCH, p / FLIGHT);
+  if (p < FLIGHT) return flight(S_THROW, WEST, N_CATCH, p / FLIGHT);
   p -= FLIGHT;
   if (p < DWELL) return scoop(N_CATCH, N_THROW, p / DWELL, -7);
   p -= DWELL;
-  if (p < FLIGHT) return quad(N_THROW, EAST, S_CATCH, p / FLIGHT);
+  if (p < FLIGHT) return flight(N_THROW, EAST, S_CATCH, p / FLIGHT);
   p -= FLIGHT;
   return scoop(S_CATCH, S_THROW, p / DWELL, 7);
 }
 
-// A moment where the three balls are nicely spread, for still images.
+// How height shows: a higher ball is nearer to you, so it's drawn bigger, and
+// its shadow falls further behind it.
+export const ballScale = (h) => 1 + 0.35 * h;
+export const shadowOffset = (h) => [3.5 + 13 * h, 4.5 + 16 * h];
+
+// A moment where the three balls are nicely spread, for still images. The
+// animation starts here too, so the balls don't jump when it takes over.
 export const STILL_T = 0.5;
 
-const ball = (i, [x, y], extra = "") =>
-  `<g class="ball" data-ball="${i}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"${extra}>` +
-  `<circle r="${BALL_R}" cx="3.5" cy="4.5" fill="${COLORS.deep}"/>` +
-  `<circle r="${BALL_R}" fill="${BALL_COLORS[i]}" stroke="${COLORS.deep}" stroke-width="3.5"/>` +
-  `</g>`;
+function ball(i, [x, y, h]) {
+  const [sx, sy] = shadowOffset(h);
+  return (
+    `<g class="ball" data-ball="${i}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})">` +
+    `<circle class="ball-shadow" r="${BALL_R}" cx="${sx.toFixed(1)}" cy="${sy.toFixed(1)}" fill="${COLORS.deep}"/>` +
+    `<circle class="ball-body" r="${BALL_R}" transform="scale(${ballScale(h).toFixed(3)})" fill="${BALL_COLORS[i]}" stroke="${COLORS.deep}" stroke-width="3.5"/>` +
+    `</g>`
+  );
+}
 
 function islandGroup({ pinPulse = false } = {}) {
   return (
