@@ -194,9 +194,15 @@ if (svg) {
       }
       place(b);
     }
+    turnRing();
+  }
+
+  // The ring turns with the page scroll as well as on its own, even while paused.
+  function turnRing() {
     const angle = reducedMotion ? 0 : spin + scrollY * 0.12;
     ring.setAttribute("transform", `rotate(${angle.toFixed(2)} 200 200)`);
   }
+  if (!reducedMotion) addEventListener("scroll", () => frame || turnRing(), { passive: true });
 
   // Run only while something moves and the badge is on screen.
   const busy = () => visible && (playing || balls.some((b) => b.mode !== "loop"));
