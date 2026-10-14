@@ -23,7 +23,7 @@ export function deployment(env = {}) {
   const url = (env.SITE_URL || "https://juggling.cy").replace(/\/$/, "");
   return { url, base: new URL(url + "/").pathname };
 }
-export const EMAIL = "jugglingcyprus@gmail.com";
+export const EMAIL = "hello@juggling.cy";
 export const INSTAGRAM = "https://www.instagram.com/jugglingcyprus/";
 
 export const LANGS = [
