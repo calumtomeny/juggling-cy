@@ -29,7 +29,7 @@ npm run dev
 
 Pushing to `main` builds the site and publishes it to GitHub Pages (`.github/workflows/deploy.yml`). In the repo's **Settings → Pages**, set the source to **GitHub Actions**.
 
-The build takes the site's address from GitHub Pages, so it works both at `calumtomeny.github.io/juggling-cy/` and, once set up, at the custom domain. To switch to `juggling.cy`, enter it under **Settings → Pages → Custom domain**, point the domain's DNS at GitHub Pages, then re-run the workflow so links and share images use the new address.
+The site is built for `https://juggling.cy`, the default in `src/site.js`; set under **Settings → Pages → Custom domain**. To move it, change that default (or set `SITE_URL` on the build step) and re-run the workflow so links and share images use the new address.
 
 ## Translations
 
