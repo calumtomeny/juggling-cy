@@ -197,9 +197,10 @@ if (svg) {
     turnRing();
   }
 
-  // The ring turns with the page scroll as well as on its own, even while paused.
+  // The ring turns on its own while playing, and with the page scroll even while
+  // paused. Reduced motion skips the scroll part; pressing play still spins it.
   function turnRing() {
-    const angle = reducedMotion ? 0 : spin + scrollY * 0.12;
+    const angle = spin + (reducedMotion ? 0 : scrollY * 0.12);
     ring.setAttribute("transform", `rotate(${angle.toFixed(2)} 200 200)`);
   }
   if (!reducedMotion) addEventListener("scroll", () => frame || turnRing(), { passive: true });
