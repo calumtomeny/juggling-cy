@@ -157,6 +157,8 @@ export function renderPage(t, lang, map, { url: site, base }) {
     lang,
     locale: L.locale,
     countdown: t.countdown,
+    weather: t.weather,
+    instagram: INSTAGRAM,
     pause: t.hero.pause,
     play: t.hero.play,
     copied: t.find.copied,
@@ -236,6 +238,7 @@ ${jsonLd(t, lang, site)}
             </div>
           </details>
         </div>
+        <p class="forecast" data-forecast hidden></p>
         <div class="hero-actions">
           <a class="btn btn-gold btn-new" href="#new">${esc(t.hero.new)} ${ARROW_RIGHT}</a>
           <a class="btn btn-line" href="#find">${esc(t.hero.cta)} ${ARROW_DOWN}</a>

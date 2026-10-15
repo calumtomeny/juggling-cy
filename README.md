@@ -18,7 +18,7 @@ npm run dev
 | Any wording, in any language | `src/i18n/en.json`, `el.json`, `tr.json` |
 | Page structure | `src/page.js` (renders each language to HTML) |
 | Styles | `src/styles.css` |
-| Countdown, throwable balls, scroll effects | `src/app.js` |
+| Countdown, weather forecast, throwable balls, scroll effects | `src/app.js` |
 | The badge / logo, ball pattern | `src/badge.js` |
 | Meeting point, time zone, links, the calendar entry's end time | `src/site.js` |
 | The "Find us" map | `npm run map` re-fetches it from OpenStreetMap into `src/map-data.json` |

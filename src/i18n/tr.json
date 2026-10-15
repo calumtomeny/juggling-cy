@@ -56,6 +56,25 @@
     "today": "Bugün 19:00’da · {time} sonra",
     "on": "Şu an devam ediyor. Gel, katıl!"
   },
+  "weather": {
+    "early": "Erken tahmin",
+    "verdict": {
+      "good": "Jonglörlük için güzel hava",
+      "windy": "Rüzgârlı bir akşam",
+      "rain": "Yağmur bekleniyor",
+      "storm": "Fırtına bekleniyor"
+    },
+    "sky": {
+      "clear": "açık",
+      "cloudy": "bulutlu",
+      "fog": "sisli",
+      "rain": "yağmurlu",
+      "storm": "fırtınalı"
+    },
+    "windy": "rüzgârlı",
+    "rain": "%{n} yağmur ihtimali",
+    "check": "Çıkmadan önce Instagram’a bak"
+  },
   "calendar": {
     "add": "Takvime ekle",
     "google": "Google Takvim",

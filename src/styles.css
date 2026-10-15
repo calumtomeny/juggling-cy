@@ -300,6 +300,24 @@ html:not(.js) .js-only { display: none !important; }
 }
 @keyframes blink { 50% { opacity: 0.25; } }
 
+/* Forecast for the next session: a quiet line under the countdown. */
+.forecast {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  color: rgb(247 244 236 / 0.85);
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+.forecast[hidden] { display: none; }
+.forecast svg { flex: none; margin-top: 0.05rem; color: var(--gold); }
+.forecast-early { font-style: italic; }
+.forecast-verdict { color: var(--foam); }
+.forecast[data-verdict="rain"] .forecast-verdict,
+.forecast[data-verdict="storm"] .forecast-verdict { color: var(--gold); }
+.forecast-check { color: var(--gold); font-weight: 700; }
+
 /* Add to calendar: a small menu that opens under its button. */
 .cal { position: relative; }
 .cal summary {

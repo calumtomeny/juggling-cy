@@ -1,5 +1,5 @@
 import { ballPosition, ballScale, shadowOffset, BOUNDS, BALL_R, STILL_T } from "./badge.js";
-import { TZ, START_HOUR } from "./site.js";
+import { TZ, START_HOUR, END_HOUR, PIN, firstTuesday } from "./site.js";
 
 const T = JSON.parse(document.getElementById("i18n").textContent);
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -84,6 +84,77 @@ if (countdown) {
   setInterval(tick, 30_000);
   document.addEventListener("visibilitychange", () => document.visibilityState === "visible" && tick());
 }
+
+// ---------- Forecast for the next session, from Open-Meteo ----------
+
+// WMO weather codes, grouped into the few skies worth telling a juggler about.
+// Snow at sea level in Larnaca counts as rain.
+function sky(code) {
+  if (code >= 95) return "storm";
+  if (code >= 51) return "rain";
+  if (code >= 45) return "fog";
+  if (code >= 2) return "cloudy";
+  return "clear";
+}
+const SKY_ICONS = {
+  clear: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/>',
+  cloudy: '<path d="M7 18a4 4 0 0 1-.5-8A5 5 0 0 1 16 9.5 3.5 3.5 0 0 1 17 18z"/>',
+  rain: '<path d="M7 15a4 4 0 0 1-.5-8A5 5 0 0 1 16 6.5 3.5 3.5 0 0 1 17 15z"/><path d="M8 18l-1 2.5M12 18l-1 2.5M16 18l-1 2.5"/>',
+};
+SKY_ICONS.fog = SKY_ICONS.cloudy;
+SKY_ICONS.storm = SKY_ICONS.rain;
+// Steady wind above this (km/h) pushes throws around.
+const WINDY = 25;
+const LIKELY = 50;
+// Further ahead than this, the forecast is marked as early: it often changes.
+const EARLY_DAYS = 3;
+
+const forecastEl = document.querySelector("[data-forecast]");
+async function forecast() {
+  const now = new Date();
+  const day = firstTuesday(now);
+  const date = `${day.slice(0, 4)}-${day.slice(4, 6)}-${day.slice(6)}`;
+  const q = new URLSearchParams({
+    latitude: PIN.lat, longitude: PIN.lon, timezone: TZ, start_date: date, end_date: date,
+    hourly: "temperature_2m,precipitation_probability,weather_code,wind_speed_10m",
+  });
+  const res = await fetch(`https://api.open-meteo.com/v1/forecast?${q}`);
+  if (!res.ok) return;
+  const { hourly: h } = await res.json();
+  // The session hours, 7pm until the calendar entry ends.
+  const hours = h.time.map((t, i) => [+t.slice(11, 13), i]).filter(([hr]) => hr >= START_HOUR && hr < END_HOUR).map(([, i]) => i);
+  const temp = h.temperature_2m[hours[0]];
+  if (temp == null) return;
+  const worst = sky(Math.max(...hours.map((i) => h.weather_code[i] ?? 0)));
+  const chance = Math.max(...hours.map((i) => h.precipitation_probability[i] ?? 0));
+  const windy = Math.max(...hours.map((i) => h.wind_speed_10m[i] ?? 0)) >= WINDY;
+  const wet = worst === "rain" || worst === "storm" || chance >= LIKELY;
+
+  // Lead with what it means for juggling, then the details.
+  const W = T.weather;
+  const verdict = worst === "storm" ? "storm" : wet ? "rain" : windy ? "windy" : "good";
+  const celsius = new Intl.NumberFormat(T.locale, { style: "unit", unit: "celsius", maximumFractionDigits: 0 });
+  const details = [celsius.format(temp), W.sky[worst]];
+  if (windy && verdict !== "windy") details.push(W.windy);
+  if (chance >= 20) details.push(W.rain.replace("{n}", chance));
+  const early = (TUESDAY - wall(now).weekday + 7) % 7 > EARLY_DAYS;
+
+  forecastEl.innerHTML =
+    `<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SKY_ICONS[wet ? "rain" : worst]}</svg>` +
+    `<span>${early ? '<span class="forecast-early"></span> ' : ""}<strong class="forecast-verdict"></strong> · <span class="forecast-details"></span>${wet ? ' <a class="forecast-check"></a>' : ""}</span>`;
+  if (early) forecastEl.querySelector(".forecast-early").textContent = `${W.early}:`;
+  forecastEl.querySelector(".forecast-verdict").textContent = W.verdict[verdict];
+  forecastEl.querySelector(".forecast-details").textContent = details.join(" · ");
+  if (wet) {
+    const a = forecastEl.querySelector(".forecast-check");
+    a.href = T.instagram;
+    a.textContent = W.check;
+  }
+  forecastEl.dataset.verdict = verdict;
+  forecastEl.hidden = false;
+}
+// The forecast is a nice-to-have: if it fails, the slot stays hidden.
+if (forecastEl) forecast().catch(() => {});
 
 // ---------- Add to calendar menu: close on Escape or a click elsewhere ----------
 

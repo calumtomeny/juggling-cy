@@ -56,6 +56,25 @@
     "today": "Today at 7pm · in {time}",
     "on": "On now. Come and join in!"
   },
+  "weather": {
+    "early": "Early forecast",
+    "verdict": {
+      "good": "Good juggling weather",
+      "windy": "Windy evening",
+      "rain": "Rain likely",
+      "storm": "Storms likely"
+    },
+    "sky": {
+      "clear": "clear",
+      "cloudy": "cloudy",
+      "fog": "foggy",
+      "rain": "rainy",
+      "storm": "stormy"
+    },
+    "windy": "windy",
+    "rain": "{n}% chance of rain",
+    "check": "Check Instagram before you head out"
+  },
   "calendar": {
     "add": "Add to calendar",
     "google": "Google Calendar",
