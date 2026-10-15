@@ -55,6 +55,22 @@ export const DIRECTIONS = {
   apple: `https://maps.apple.com/?ll=${ll}&q=${encodeURIComponent("Juggling Cyprus")}`,
 };
 
+// The next `count` Tuesdays from a date, as Cyprus calendar days (YYYYMMDD).
+export function tuesdays(count, date = new Date()) {
+  const first = firstTuesday(date);
+  const start = Date.UTC(+first.slice(0, 4), +first.slice(4, 6) - 1, +first.slice(6));
+  return Array.from({ length: count }, (_, i) => new Date(start + i * 7 * 864e5).toISOString().slice(0, 10).replace(/-/g, ""));
+}
+
+// A Cyprus calendar day and hour as an ISO date-time with its UTC offset,
+// which moves between +02:00 and +03:00 with summer time.
+export function isoAt(day, hour) {
+  const noon = new Date(Date.UTC(+day.slice(0, 4), +day.slice(4, 6) - 1, +day.slice(6), 12));
+  const name = new Intl.DateTimeFormat("en-US", { timeZone: TZ, timeZoneName: "longOffset" }).formatToParts(noon).find((p) => p.type === "timeZoneName").value;
+  const offset = name === "GMT" ? "+00:00" : name.slice(3);
+  return `${day.slice(0, 4)}-${day.slice(4, 6)}-${day.slice(6)}T${String(hour).padStart(2, "0")}:00:00${offset}`;
+}
+
 // The weekly session for calendars, in the words of one language. `t` is that
 // language's translation file and `url` its page.
 export const RRULE = "FREQ=WEEKLY;BYDAY=TU";

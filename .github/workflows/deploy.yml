@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Weekly, after Tuesday's meetup, so the event dates for Google move on.
+  schedule:
+    - cron: "0 3 * * 3"
 
 permissions:
   contents: read

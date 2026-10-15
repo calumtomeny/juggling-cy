@@ -1,7 +1,9 @@
 // Renders one language's page to an HTML string. scripts/pages.mjs writes the
 // result to index.html, el/index.html and tr/index.html for Vite to build.
 import { badgeSVG, markSVG, BALL_COLORS, COLORS } from "./badge.js";
-import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR, RRULE, calendarEvent, icsFile } from "./site.js";
+import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR, END_HOUR, RRULE, calendarEvent, icsFile, tuesdays, isoAt } from "./site.js";
+
+const WEEKS_LISTED = 8;
 
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
@@ -134,7 +136,15 @@ function jsonLd(t, lang, site) {
       sameAs: INSTAGRAM,
     },
   };
-  return JSON.stringify(data, null, 2).replace(/</g, "\\u003c");
+  // Google reads events only with a startDate, so list the coming weeks as
+  // dated occurrences. The deploy workflow rebuilds weekly to move them on.
+  const events = tuesdays(WEEKS_LISTED).map((day) => ({
+    ...data,
+    startDate: isoAt(day, START_HOUR),
+    endDate: isoAt(day, END_HOUR),
+    offers: { "@type": "Offer", price: 0, priceCurrency: "EUR", availability: "https://schema.org/InStock", url: data.url },
+  }));
+  return JSON.stringify(events, null, 2).replace(/</g, "\\u003c");
 }
 
 export function renderPage(t, lang, map, { url: site, base }) {
