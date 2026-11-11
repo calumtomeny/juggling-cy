@@ -38,6 +38,17 @@ const CAL_ICON =
 const preloadFont = (lang) =>
   `<link rel="preload" href="/node_modules/@fontsource-variable/syne/files/syne-${lang === "el" ? "greek" : "latin"}-wght-normal.woff2" as="font" type="font/woff2" crossorigin>`;
 
+// The video's poster: a toss arc across the frame with the play button as the
+// ball at its peak. Drawn at 16:9, the frame's own shape, so circles stay round.
+function posterSVG() {
+  const ball = ([x, y], c) =>
+    `<circle cx="${x + 7}" cy="${y + 8}" r="50" fill="${COLORS.deep}"/><circle cx="${x}" cy="${y}" r="50" fill="${c}" stroke="${COLORS.deep}" stroke-width="5"/>`;
+  return `<svg class="video-poster" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <path d="M-100 1147.5Q800 -247.5 1700 1147.5"/>
+              ${ball([416, 577], BALL_COLORS[0])}${ball([1064, 510], BALL_COLORS[2])}
+            </svg>`;
+}
+
 function googleCalendar(e) {
   const query = { action: "TEMPLATE", text: e.title, dates: `${e.start}/${e.end}`, ctz: TZ, recur: `RRULE:${RRULE}`, location: e.location, details: e.details };
   return "https://calendar.google.com/calendar/render?" + Object.entries(query).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
@@ -361,7 +372,7 @@ ${t.newbie.steps
         <p class="watch-intro reveal">${esc(t.watch.intro)}</p>
         <figure class="video reveal">
           <a class="video-frame" href="https://www.youtube.com/watch?v=${VIDEO.id}" data-video="${VIDEO.id}" data-video-title="${esc(VIDEO.title)}">
-            ${markSVG({ attrs: 'class="video-mark" aria-hidden="true"' })}
+            ${posterSVG()}
             <span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg></span>
             <span class="video-label">${esc(t.watch.play)}</span>
           </a>

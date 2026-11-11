@@ -19,6 +19,10 @@
 
   --display: "Syne Variable", Syne, "Avenir Next", sans-serif;
   --body: "Geologica Variable", Geologica, "Segoe UI", system-ui, sans-serif;
+  /* The hero's dot grid, in ink, for the light sections. */
+  --sand-dots:
+    radial-gradient(rgb(14 76 89 / 0.07) 1.4px, transparent 1.6px) 0 0 / 22px 22px,
+    var(--sand);
   --gutter: clamp(16px, 4vw, 40px);
   --tilt-edge: 5vw;
 }
@@ -52,6 +56,9 @@ h1, h2, h3, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
 /* A word too long for its line breaks, instead of running off the screen. */
 h1, h2, h3 { overflow-wrap: break-word; }
+/* No lone last words: headings split evenly, paragraphs avoid a one-word line. */
+h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
 
 a { color: inherit; }
 
@@ -138,6 +145,14 @@ html:not(.js) .js-only { display: none !important; }
   border-color: var(--foam);
   background: rgb(247 244 236 / 0.1);
 }
+@media (hover: hover) {
+  .btn-line:hover { transform: translateY(-2px); }
+}
+.btn-line:active { transform: translateY(1px); }
+.btn svg { transition: transform 0.2s ease; }
+@media (hover: hover) {
+  .btn-new:hover svg { transform: translateX(4px); }
+}
 
 .btn-big { min-height: 3.6rem; padding-inline: 1.6rem; font-size: 1.15rem; }
 .btn-small { min-height: 2.6rem; padding: 0.45rem 1rem; font-size: 0.95rem; border-width: 2px; }
@@ -158,6 +173,7 @@ html:not(.js) .js-only { display: none !important; }
   font: 800 0.85rem/1.2 var(--display);
   text-align: center;
   text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 .switcher a:hover { background: rgb(247 244 236 / 0.12); }
 .switcher a[aria-current] { background: var(--gold); color: var(--ink); }
@@ -339,7 +355,9 @@ html:not(.js) .js-only { display: none !important; }
   font-size: 0.95rem;
   list-style: none;
   cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
+.cal summary:hover { border-color: var(--foam); background: rgb(247 244 236 / 0.1); }
 .cal summary::-webkit-details-marker { display: none; }
 .cal summary svg { color: var(--gold); }
 .cal[open] summary { border-color: var(--gold); }
@@ -475,7 +493,7 @@ html:not(.js) .hint,
 .newbie {
   --focus: var(--ink);
   padding-bottom: calc(var(--tilt-edge) + clamp(4rem, 9vw, 6.5rem));
-  background: var(--sand);
+  background: var(--sand-dots);
 }
 
 .newbie-intro {
@@ -632,7 +650,7 @@ html:not(.js) .hint,
 .watch {
   --focus: var(--ink);
   padding-top: clamp(4rem, 9vw, 6.5rem);
-  background: var(--sand);
+  background: var(--sand-dots);
 }
 .watch-intro {
   margin-top: 0.8rem;
@@ -651,6 +669,7 @@ html:not(.js) .hint,
   border: 3px solid var(--deep);
   border-radius: 24px;
   background:
+    radial-gradient(circle at 50% 50%, rgb(240 193 74 / 0.2), transparent 45%),
     radial-gradient(rgb(247 244 236 / 0.07) 1.4px, transparent 1.6px) 0 0 / 22px 22px,
     var(--sea);
   box-shadow: 8px 8px 0 var(--deep);
@@ -664,10 +683,20 @@ html:not(.js) .hint,
   height: 100%;
   border: 0;
 }
-.video-mark {
+.video-poster {
   position: absolute;
-  width: 62%;
-  opacity: 0.22;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.video-poster path {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.5 13;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.75;
 }
 .video-play {
   position: relative;
@@ -713,7 +742,7 @@ html:not(.js) .hint,
 .good {
   --focus: var(--ink);
   padding: clamp(4rem, 9vw, 6.5rem) 0 calc(var(--tilt-edge) + clamp(4rem, 9vw, 6.5rem));
-  background: var(--sand);
+  background: var(--sand-dots);
 }
 
 .section-title {
@@ -784,7 +813,7 @@ html:not(.js) .hint,
 /* ---------- Find us ---------- */
 
 .find {
-  padding-bottom: clamp(4rem, 9vw, 7rem);
+  padding-bottom: calc(var(--tilt-edge) + clamp(4rem, 9vw, 7rem));
   background:
     radial-gradient(rgb(247 244 236 / 0.06) 1.4px, transparent 1.6px) 0 0 / 22px 22px,
     var(--sea);
@@ -874,6 +903,7 @@ html:not(.js) .hint,
   color: var(--foam);
   font: 700 0.85rem/1 var(--body);
   cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
 }
 .copy:hover { border-color: var(--foam); }
 .copy.done { border-color: var(--gold); background: var(--gold); color: var(--ink); }
@@ -967,7 +997,10 @@ html:not(.js) .hint,
 /* ---------- Footer ---------- */
 
 .footer {
-  padding: clamp(4rem, 9vw, 6rem) 0 max(2rem, env(safe-area-inset-bottom));
+  position: relative;
+  margin-top: calc(-1 * var(--tilt-edge));
+  padding: calc(var(--tilt-edge) + clamp(3.5rem, 8vw, 5rem)) 0 max(2rem, env(safe-area-inset-bottom));
+  clip-path: polygon(0 var(--tilt-edge), 100% 0, 100% 100%, 0 100%);
   background: var(--deep);
   color: var(--foam);
 }
@@ -1140,7 +1173,7 @@ html.js .reveal.in {
 
 @media print {
   body, .hero, .welcome, .good, .find, .footer { background: #fff; color: #000; }
-  .welcome, .find { clip-path: none; margin-top: 0; }
+  .welcome, .find, .footer { clip-path: none; margin-top: 0; }
   .newbie { clip-path: none; margin-top: 0; }
   .stage, .bar-nav, .switcher, .hero-actions, .cal, .footer-logo, .copy, .welcome-arc { display: none; }
   .time, .place, .kopiaste { color: #000; }
