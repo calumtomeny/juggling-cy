@@ -1,7 +1,7 @@
 // Renders one language's page to an HTML string. scripts/pages.mjs writes the
 // result to index.html, el/index.html and tr/index.html for Vite to build.
 import { badgeSVG, markSVG, BALL_COLORS, COLORS } from "./badge.js";
-import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, PIN, TZ, START_HOUR, END_HOUR, RRULE, calendarEvent, icsFile, tuesdays, isoAt } from "./site.js";
+import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, VIDEO, PIN, TZ, START_HOUR, END_HOUR, RRULE, calendarEvent, icsFile, tuesdays, isoAt } from "./site.js";
 
 const WEEKS_LISTED = 8;
 
@@ -303,6 +303,21 @@ ${t.newbie.steps
           <p>${esc(t.welcome.island)}</p>
           <p class="kopiaste"><span lang="el">Kopiaste · Κοπιάστε</span> · <span lang="tr">Buyurun</span></p>
         </div>
+      </div>
+    </section>
+
+    <section class="watch" id="watch" aria-labelledby="watch-title">
+      <div class="wrap">
+        <h2 id="watch-title" class="section-title reveal">${esc(t.watch.title)}</h2>
+        <p class="watch-intro reveal">${esc(t.watch.intro)}</p>
+        <figure class="video reveal">
+          <a class="video-frame" href="https://www.youtube.com/watch?v=${VIDEO.id}" data-video="${VIDEO.id}" data-video-title="${esc(VIDEO.title)}">
+            ${markSVG({ attrs: 'class="video-mark" aria-hidden="true"' })}
+            <span class="video-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="34" height="34"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg></span>
+            <span class="video-label">${esc(t.watch.play)}</span>
+          </a>
+          <figcaption>${esc(t.watch.credit).replace("{author}", `<a href="${VIDEO.authorUrl}">${esc(VIDEO.author)}</a>`)} · ${esc(t.watch.note)}</figcaption>
+        </figure>
       </div>
     </section>
 

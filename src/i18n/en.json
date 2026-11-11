@@ -86,6 +86,13 @@
     "p2": "Bring a ball if you have one. Empty hands are fine too: there’s plenty to borrow.",
     "island": "Wherever you’re from, north or south, near or far, there’s a space in the circle for you."
   },
+  "watch": {
+    "title": "See it in action",
+    "intro": "A taste of a Tuesday night at the skate park.",
+    "play": "Play the video",
+    "credit": "Video by {author}",
+    "note": "Plays from YouTube"
+  },
   "good": {
     "title": "Good to know",
     "items": [

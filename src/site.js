@@ -25,6 +25,8 @@ export function deployment(env = {}) {
 }
 export const EMAIL = "hello@juggling.cy";
 export const INSTAGRAM = "https://www.instagram.com/jugglingcyprus/";
+// The video on the page. It loads from YouTube only once someone presses play.
+export const VIDEO = { id: "OVYUi0afdn8", title: "Juggling Cyprus - Open Session", author: "bgNightmareTuna", authorUrl: "https://www.youtube.com/@bgNightmareTunaRoT" };
 
 export const LANGS = [
   { code: "en", label: "EN", path: "/", locale: "en-GB", og: "en_GB" },

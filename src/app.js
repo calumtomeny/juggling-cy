@@ -363,6 +363,24 @@ if ("IntersectionObserver" in window && !reducedMotion) {
   reveals.forEach((el) => el.classList.add("in"));
 }
 
+// ---------- Video: load YouTube only once someone presses play ----------
+
+for (const link of document.querySelectorAll("[data-video]")) {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    const frame = document.createElement("iframe");
+    frame.src = `https://www.youtube-nocookie.com/embed/${link.dataset.video}?autoplay=1&rel=0`;
+    frame.title = link.dataset.videoTitle;
+    frame.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    frame.allowFullscreen = true;
+    const box = document.createElement("div");
+    box.className = link.className;
+    box.append(frame);
+    link.replaceWith(box);
+    frame.focus();
+  });
+}
+
 // ---------- Copy coordinates ----------
 
 for (const button of document.querySelectorAll("[data-copy]")) {

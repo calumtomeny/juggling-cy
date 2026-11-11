@@ -86,6 +86,13 @@
     "p2": "Topun varsa getir. Yoksa da sorun değil: ödünç alabileceğin bolca ekipman var.",
     "island": "Nereden gelirsen gel, kuzeyden ya da güneyden, yakından ya da uzaktan, çemberde sana da yer var."
   },
+  "watch": {
+    "title": "Bir de izleyin",
+    "intro": "Kaykay parkında bir Salı akşamından bir tadımlık.",
+    "play": "Videoyu oynat",
+    "credit": "Video: {author}",
+    "note": "YouTube üzerinden oynatılır"
+  },
   "good": {
     "title": "Bilmekte fayda var",
     "items": [
