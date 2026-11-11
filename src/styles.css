@@ -27,7 +27,11 @@
 *::before,
 *::after { box-sizing: border-box; }
 
+/* If anything ever sticks out sideways, cut it off rather than let phones zoom
+   the whole page out to fit it. It takes both rules: the one on html goes to
+   the viewport, and only then does the one on body clip the page itself. */
 html {
+  overflow-x: clip;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
@@ -46,6 +50,8 @@ body {
 
 h1, h2, h3, p, ul, ol, figure { margin: 0; }
 ul, ol { padding: 0; list-style: none; }
+/* A word too long for its line breaks, instead of running off the screen. */
+h1, h2, h3 { overflow-wrap: break-word; }
 
 a { color: inherit; }
 
@@ -714,6 +720,10 @@ html:not(.js) .hint,
   font: 800 clamp(2.4rem, 7vw, 4.4rem)/1 var(--display);
   letter-spacing: -0.035em;
 }
+/* Greek and Turkish titles have longer words ("ζογκλερικά;", "Jonglörlükte"),
+   so on narrow phones they shrink until the longest fits on one line. */
+:lang(el) .section-title,
+:lang(tr) .section-title { font-size: min(clamp(2.4rem, 7vw, 4.4rem), 9.4vw); }
 
 .cards {
   display: grid;
@@ -1016,6 +1026,22 @@ html:not(.js) .hint,
 .feedback { font-size: 0.88rem; }
 .feedback a { color: var(--lemon); text-underline-offset: 3px; }
 
+/* ---------- Page not found ---------- */
+
+.lost { min-height: 100svh; padding-bottom: 4rem; }
+.lost-grid {
+  display: grid;
+  gap: 2.5rem;
+  padding-top: clamp(3rem, 10vw, 7rem);
+}
+.lost-lang { display: grid; gap: 1rem; justify-items: start; max-width: 40rem; }
+.lost-title {
+  color: var(--gold);
+  font: 800 clamp(2.2rem, 6vw, 3.4rem)/1 var(--display);
+  letter-spacing: -0.03em;
+}
+.lost-lang p { font-size: 1.1rem; opacity: 0.9; }
+
 /* ---------- Scroll reveal ---------- */
 
 html.js .reveal {
@@ -1060,7 +1086,11 @@ html.js .reveal.in {
 @media (min-width: 760px) {
   .bar-nav { display: flex; }
   .welcome-grid { grid-template-columns: 1.35fr 0.65fr; align-items: end; gap: 3rem; }
-  .footer-grid { grid-template-columns: auto 1fr 1fr; gap: 3rem; }
+  /* Logo, Instagram and "start a meetup" share a row while their longest words
+     fit. Where they don't (Greek and Turkish on tablets), the last drops below. */
+  .footer-grid { display: flex; flex-wrap: wrap; gap: 2.5rem 3rem; }
+  .footer-logo { flex: none; }
+  .footer-ig, .start { flex: 1 1 12rem; }
   .newbie-steps { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
   .newbie-steps::before {
     top: 1.9rem;

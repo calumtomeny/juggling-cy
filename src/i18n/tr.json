@@ -87,7 +87,7 @@
     "island": "Nereden gelirsen gel, kuzeyden ya da güneyden, yakından ya da uzaktan, çemberde sana da yer var."
   },
   "watch": {
-    "title": "Bir de izleyin",
+    "title": "Bir de izle",
     "intro": "Kaykay parkında bir Salı akşamından bir tadımlık.",
     "play": "Videoyu oynat",
     "credit": "Video: {author}",
@@ -155,6 +155,11 @@
       "here": "Buradayız"
     },
     "attribution": "Harita verileri © OpenStreetMap katkıda bulunanlar"
+  },
+  "notFound": {
+    "title": "Düştü!",
+    "body": "Bu adreste bir sayfa yok.",
+    "home": "Ana sayfaya dön"
   },
   "footer": {
     "igTitle": "Fotoğraflar, videolar ve hava durumu güncellemeleri",

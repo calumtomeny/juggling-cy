@@ -29,9 +29,10 @@ export const INSTAGRAM = "https://www.instagram.com/jugglingcyprus/";
 export const VIDEO = { id: "OVYUi0afdn8", title: "Juggling Cyprus - Open Session", author: "bgNightmareTuna", authorUrl: "https://www.youtube.com/@bgNightmareTunaRoT" };
 
 export const LANGS = [
-  { code: "en", label: "EN", path: "/", locale: "en-GB", og: "en_GB" },
-  { code: "el", label: "ΕΛ", path: "/el/", locale: "el-GR", og: "el_GR" },
-  { code: "tr", label: "TR", path: "/tr/", locale: "tr-TR", og: "tr_TR" },
+  // `name` is what screen readers say for the switcher's short label.
+  { code: "en", label: "EN", name: "English", path: "/", locale: "en-GB", og: "en_GB" },
+  { code: "el", label: "ΕΛ", name: "Ελληνικά", path: "/el/", locale: "el-GR", og: "el_GR" },
+  { code: "tr", label: "TR", name: "Türkçe", path: "/tr/", locale: "tr-TR", og: "tr_TR" },
 ];
 
 // CoMaps (and Organic Maps) short links pack zoom, latitude and longitude into

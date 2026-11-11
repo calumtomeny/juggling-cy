@@ -32,6 +32,12 @@ const ARROW_OUT =
 const CAL_ICON =
   '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5"/></svg>';
 
+// The big headline is Syne, which the stylesheet only asks for once it has
+// loaded, so it would flash in a fallback font. Fetch the subset the headline
+// uses straight away: Greek for the Greek page, Latin otherwise.
+const preloadFont = (lang) =>
+  `<link rel="preload" href="/node_modules/@fontsource-variable/syne/files/syne-${lang === "el" ? "greek" : "latin"}-wght-normal.woff2" as="font" type="font/woff2" crossorigin>`;
+
 function googleCalendar(e) {
   const query = { action: "TEMPLATE", text: e.title, dates: `${e.start}/${e.end}`, ctz: TZ, recur: `RRULE:${RRULE}`, location: e.location, details: e.details };
   return "https://calendar.google.com/calendar/render?" + Object.entries(query).map(([k, v]) => `${k}=${encodeURIComponent(v)}`).join("&");
@@ -40,7 +46,7 @@ function googleCalendar(e) {
 function switcher(lang, t, cls, base) {
   const links = LANGS.map(
     (l) =>
-      `<a href="${base + l.path.slice(1)}" hreflang="${l.code}" lang="${l.code}" data-lang="${l.code}"${l.code === lang ? ' aria-current="page"' : ""}>${l.label}</a>`
+      `<a href="${base + l.path.slice(1)}" hreflang="${l.code}" lang="${l.code}" data-lang="${l.code}"${l.code === lang ? ' aria-current="page"' : ""}><span aria-hidden="true">${l.label}</span><span class="sr">${esc(l.name)}</span></a>`
   ).join("");
   return `<nav class="switcher ${cls}" aria-label="${esc(t.nav.language)}">${links}</nav>`;
 }
@@ -147,6 +153,45 @@ function jsonLd(t, lang, site) {
   return JSON.stringify(events, null, 2).replace(/</g, "\\u003c");
 }
 
+// The page for addresses that don't exist. It can't know which language the
+// visitor wanted, so it says it in all three, each linking to its home page.
+export function renderNotFound(all, { base }) {
+  const blocks = LANGS.map(({ code, path }) => {
+    const n = all[code].notFound;
+    return `      <div class="lost-lang" lang="${code}">
+        <h${code === "en" ? 1 : 2} class="lost-title">${esc(n.title)}</h${code === "en" ? 1 : 2}>
+        <p>${esc(n.body)}</p>
+        <a class="btn btn-gold" href="${base + path.slice(1)}">${esc(n.home)} ${ARROW_RIGHT}</a>
+      </div>`;
+  }).join("\n");
+  return `<!doctype html>
+<!-- Generated from src/page.js and the translation files. Edit those, not this. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>${esc(all.en.notFound.title)} · Juggling Cyprus</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="${COLORS.sea}">
+  <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
+  ${preloadFont("en")}
+  <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+  <main class="hero lost">
+    <div class="bar wrap">
+      <a class="brand" href="${base}">${markSVG({ attrs: 'class="brand-mark" aria-hidden="true"' })}<span>Juggling Cyprus</span></a>
+    </div>
+    <div class="wrap lost-grid">
+${blocks}
+    </div>
+  </main>
+</body>
+</html>
+`;
+}
+
 export function renderPage(t, lang, map, { url: site, base }) {
   const L = LANGS.find((l) => l.code === lang);
   const url = site + L.path;
@@ -172,6 +217,9 @@ export function renderPage(t, lang, map, { url: site, base }) {
     lang === "en"
       ? `try{var l=localStorage.getItem("jc-lang");if((l==="el"||l==="tr")&&location.pathname===${JSON.stringify(base)}&&!location.hash)location.replace(${JSON.stringify(base)}+l+"/")}catch(e){}`
       : "";
+  // If app.js never arrives (a dropped connection, say), fall back to the
+  // no-script page. Otherwise everything waiting to be revealed stays hidden.
+  const fallback = `addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="SCRIPT"&&t.type==="module")document.documentElement.classList.remove("js")},true);`;
 
   return `<!doctype html>
 <!-- Generated from src/page.js and src/i18n/${lang}.json. Edit those, not this. -->
@@ -199,7 +247,8 @@ ${LANGS.filter((l) => l.code !== lang).map((l) => `  <meta property="og:locale:a
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
-  <script>document.documentElement.classList.add("js");${remember}</script>
+  <script>document.documentElement.classList.add("js");${fallback}${remember}</script>
+  ${preloadFont(lang)}
   <link rel="stylesheet" href="/src/styles.css">
   <script type="module" src="/src/app.js"></script>
   <script type="application/ld+json">

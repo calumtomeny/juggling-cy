@@ -156,6 +156,11 @@
     },
     "attribution": "Map data © OpenStreetMap contributors"
   },
+  "notFound": {
+    "title": "Dropped it!",
+    "body": "There’s no page at this address.",
+    "home": "Back to the home page"
+  },
   "footer": {
     "igTitle": "Photos, videos and weather updates",
     "igCta": "Follow @jugglingcyprus",

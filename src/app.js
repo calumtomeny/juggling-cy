@@ -75,6 +75,10 @@ function tick() {
       ? T.countdown.today.replace("{time}", time)
       : T.countdown.next.replace("{date}", dateFormat.format(next.at)).replace("{time}", time);
     state = next.today ? "today" : "next";
+    // On a phone the pill wraps: keep what follows the " · " in one piece, so
+    // the line never breaks in the middle of "in 5 days 20 hrs".
+    const cut = text.lastIndexOf(" · ") + 3;
+    if (cut > 3) text = text.slice(0, cut) + text.slice(cut).replace(/ /g, "\u00a0");
   }
   countdown.querySelector("[data-countdown-text]").textContent = text;
   countdown.dataset.state = state;
