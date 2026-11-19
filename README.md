@@ -32,6 +32,24 @@ Pushing to `main` builds the site and publishes it to GitHub Pages (`.github/wor
 
 The site is built for `https://juggling.cy`, the default in `src/site.js`; set under **Settings → Pages → Custom domain**. To move it, change that default (or set `SITE_URL` on the build step) and re-run the workflow so links and share images use the new address.
 
+## AI agents (Cloudflare Agent Readiness)
+
+The site is set up to pass the "Content site" checks at [isitagentready.com](https://isitagentready.com):
+
+- `robots.txt` carries Content Signals (`search=yes, ai-input=yes, ai-train=yes`), written by `scripts/assets.mjs`.
+- Each page also builds as Markdown (`/index.md`, `/el/index.md`, `/tr/index.md`), plus `/llms.txt` as an index, from `src/markdown.js`.
+
+GitHub Pages can't vary on request headers or add response headers, so two Cloudflare rules on the `juggling.cy` zone do the rest:
+
+| Rule | When | Then |
+| --- | --- | --- |
+| URL rewrite: "Markdown for agents" | `any(http.request.headers["accept"][*] contains "text/markdown") and http.request.uri.path in {"/" "/el/" "/tr/"}` | Rewrite path to `concat(http.request.uri.path, "index.md")` |
+| Response header transform: "Agent discovery headers" | `raw.http.request.uri.path in {"/" "/el/" "/tr/"}` | Set `Link` to `</llms.txt>; rel="describedby"; type="text/plain", </sitemap.xml>; rel="sitemap"`. Add `Vary: Accept` |
+
+On a Pro plan or higher, Cloudflare's own **Agent Readiness → Markdown for Agents** switch can replace the rewrite rule.
+
+The DNS-AID check and the API, OAuth, MCP and commerce checks are for sites that offer agent endpoints or APIs. This site has none, so they are left failing on purpose.
+
 ## Translations
 
 The Greek and Turkish text are drafts awaiting a native speaker's check. Each translated page links to an email for corrections.

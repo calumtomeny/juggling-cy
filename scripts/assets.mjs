@@ -7,6 +7,7 @@ import { Resvg } from "@resvg/resvg-js";
 import wawoff2 from "wawoff2";
 import { badgeSVG, markSVG, COLORS } from "../src/badge.js";
 import { LANGS, PIN, RRULE, TZ, calendarEvent, deployment, icsFile } from "../src/site.js";
+import { renderMarkdown, renderLlmsTxt, markdownFile } from "../src/markdown.js";
 
 const require = createRequire(import.meta.url);
 const root = new URL("../", import.meta.url);
@@ -138,6 +139,11 @@ for (const { code, path } of LANGS) {
   const t = JSON.parse(await readFile(new URL(`src/i18n/${code}.json`, root), "utf8"));
   await writeFile(new URL(`og-${code}.png`, pub), png(ogSVG(t), 1200));
   await writeFile(new URL(icsFile(code), pub), ics(calendarEvent(t, site + path)));
+  // The page as Markdown, for agents that ask for it (see README: Cloudflare).
+  const md = new URL(markdownFile(code), pub);
+  await mkdir(new URL(".", md), { recursive: true });
+  await writeFile(md, renderMarkdown(t, code, site));
+  if (code === "en") await writeFile(new URL("llms.txt", pub), renderLlmsTxt(t, site));
 }
 
 const alternates = LANGS.map((l) => `    <xhtml:link rel="alternate" hreflang="${l.code}" href="${site + l.path}"/>`).join("\n");
@@ -150,6 +156,12 @@ ${LANGS.map((l) => `  <url>\n    <loc>${site + l.path}</loc>\n${alternates}\n  <
 `
 );
 
-await writeFile(new URL("robots.txt", pub), `User-agent: *\nAllow: /\nSitemap: ${site}/sitemap.xml\n`);
+// Content Signals (contentsignals.org) say how the content may be used once
+// fetched: yes to search, to AI answers that cite it, and to AI training. The
+// site exists to be found, so it says yes to all three.
+await writeFile(
+  new URL("robots.txt", pub),
+  `User-agent: *\nContent-Signal: search=yes, ai-input=yes, ai-train=yes\nAllow: /\n\nSitemap: ${site}/sitemap.xml\n`
+);
 
-console.log("assets: favicon, touch icon, share images, calendar files, sitemap, robots.txt");
+console.log("assets: favicon, touch icon, share images, calendar files, Markdown pages, llms.txt, sitemap, robots.txt");

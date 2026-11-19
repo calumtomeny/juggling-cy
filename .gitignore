@@ -11,3 +11,7 @@ dist/
 /public/sitemap.xml
 /public/robots.txt
 /public/*.ics
+/public/*.md
+/public/el/
+/public/tr/
+/public/llms.txt
