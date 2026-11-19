@@ -32,6 +32,10 @@ Pushing to `main` builds the site and publishes it to GitHub Pages (`.github/wor
 
 The site is built for `https://juggling.cy`, the default in `src/site.js`; set under **Settings → Pages → Custom domain**. To move it, change that default (or set `SITE_URL` on the build step) and re-run the workflow so links and share images use the new address.
 
+## Analytics
+
+Cloudflare Web Analytics counts visits. It is cookie-free, and Cloudflare injects its beacon into the HTML at the edge, so it is not in this repo. The page's "no JavaScript" fallback in `src/page.js` ignores scripts from other sites for this reason: ad blockers often block the beacon.
+
 ## AI agents (Cloudflare Agent Readiness)
 
 The site is set up to pass the "Content site" checks at [isitagentready.com](https://isitagentready.com):

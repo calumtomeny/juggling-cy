@@ -282,7 +282,9 @@ export function renderPage(t, lang, map, { url: site, base }) {
       : "";
   // If app.js never arrives (a dropped connection, say), fall back to the
   // no-script page. Otherwise everything waiting to be revealed stays hidden.
-  const fallback = `addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="SCRIPT"&&t.type==="module")document.documentElement.classList.remove("js")},true);`;
+  // Only the site's own scripts count: Cloudflare's analytics beacon is also a
+  // module, and ad blockers often block it while app.js runs fine.
+  const fallback = `addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="SCRIPT"&&t.type==="module"&&t.src.indexOf(location.origin)===0)document.documentElement.classList.remove("js")},true);`;
 
   return `<!doctype html>
 <!-- Generated from src/page.js and src/i18n/${lang}.json. Edit those, not this. -->
