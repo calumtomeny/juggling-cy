@@ -242,6 +242,39 @@ html:not(.js) .js-only { display: none !important; }
   box-shadow: 0 0 0 3px rgb(226 75 115 / 0.3);
 }
 
+/* A happening elsewhere on the island in the next fortnight, above the kicker. */
+.event-flag {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.55rem;
+  margin-bottom: 1.3rem;
+  padding: 0.45rem 0.9rem 0.45rem 0.45rem;
+  border: 2.5px solid var(--deep);
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 3px 3px 0 var(--deep);
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.event-flag-date {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--bloom);
+  color: var(--foam);
+  font: 800 0.8rem/1.2 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+@media (hover: hover) {
+  .event-flag:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--deep); }
+  .event-flag:hover svg { transform: translateY(2px); }
+}
+.event-flag svg { transition: transform 0.2s ease; }
+
 .hero-copy { container-type: inline-size; }
 
 .when {
@@ -737,6 +770,97 @@ html:not(.js) .hint,
   text-underline-offset: 3px;
 }
 
+/* ---------- Around the island ---------- */
+
+.events {
+  --focus: var(--ink);
+  padding-top: clamp(4rem, 9vw, 6.5rem);
+  background: var(--sand-dots);
+}
+.events-intro {
+  margin-top: 0.8rem;
+  max-width: 34rem;
+  color: var(--muted);
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+}
+.events-intro a,
+.event-copy a:not(.btn) {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration-color: var(--bloom);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.event-list {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+.event {
+  --tilt: 0.5deg;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: clamp(1rem, 3vw, 1.8rem);
+  align-items: start;
+  max-width: 52rem;
+  padding: clamp(1.2rem, 3vw, 1.8rem);
+  border: 3px solid var(--deep);
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: 6px 6px 0 var(--deep);
+  transform: rotate(var(--tilt));
+}
+.event:nth-child(even) { --tilt: -0.5deg; }
+
+/* A tear-off ticket stub: weekday, big day number, month. */
+.event-date {
+  display: grid;
+  justify-items: center;
+  min-width: 4.6rem;
+  padding: 0.6rem 0.5rem 0.7rem;
+  border: 3px solid var(--deep);
+  border-radius: 16px;
+  background: var(--bloom);
+  color: var(--foam);
+  font: 800 0.85rem/1.1 var(--display);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.event-date strong { font-size: 2.3rem; line-height: 1; letter-spacing: -0.03em; }
+
+.event-copy { display: grid; gap: 0.55rem; min-width: 0; }
+.event-copy h3 { font: 800 clamp(1.5rem, 4vw, 1.9rem)/1.05 var(--display); letter-spacing: -0.02em; }
+.event-by { margin-top: -0.3rem; color: var(--copper-deep); font-weight: 600; }
+.event-when { font-weight: 600; }
+.event-copy > p:not([class]) { color: var(--muted); max-width: 38rem; }
+.event-note {
+  justify-self: start;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--lemon);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+.event-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 0.4rem; }
+/* Outline buttons are drawn for the dark sections; here they sit on paper. */
+.event-links .btn-line { border-color: var(--deep); color: var(--ink); }
+.event-links .btn-line:hover { border-color: var(--deep); background: rgb(240 193 74 / 0.3); }
+
+/* On narrow phones the date sits above the text, so the text keeps its width. */
+@media (max-width: 480px) {
+  .event { grid-template-columns: 1fr; }
+  .event-date {
+    justify-self: start;
+    display: flex;
+    gap: 0.4rem;
+    align-items: baseline;
+    min-width: 0;
+    padding: 0.35rem 0.8rem;
+  }
+  .event-date strong { font-size: 1.3rem; }
+}
+
 /* ---------- Good to know ---------- */
 
 .good {
@@ -1172,7 +1296,7 @@ html.js .reveal.in {
 }
 
 @media print {
-  body, .hero, .welcome, .good, .find, .footer { background: #fff; color: #000; }
+  body, .hero, .welcome, .events, .good, .find, .footer { background: #fff; color: #000; }
   .welcome, .find, .footer { clip-path: none; margin-top: 0; }
   .newbie { clip-path: none; margin-top: 0; }
   .stage, .bar-nav, .switcher, .hero-actions, .cal, .footer-logo, .copy, .welcome-arc { display: none; }

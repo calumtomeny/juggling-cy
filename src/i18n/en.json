@@ -93,6 +93,13 @@
     "credit": "Video by {author}",
     "note": "Plays from YouTube"
   },
+  "events": {
+    "title": "Around the island",
+    "intro": "Other juggling and circus happenings in Cyprus. Know of one? {tell}.",
+    "tell": "Tell us",
+    "more": "More info",
+    "flyer": "Flyer"
+  },
   "good": {
     "title": "Good to know",
     "items": [

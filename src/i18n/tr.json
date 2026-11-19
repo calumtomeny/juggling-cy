@@ -93,6 +93,13 @@
     "credit": "Video: {author}",
     "note": "YouTube üzerinden oynatılır"
   },
+  "events": {
+    "title": "Adanın dört bir yanında",
+    "intro": "Kıbrıs’taki diğer jonglörlük ve sirk etkinlikleri. Bildiğin bir etkinlik mi var? {tell}.",
+    "tell": "Bize yaz",
+    "more": "Ayrıntılar",
+    "flyer": "Afiş"
+  },
   "good": {
     "title": "Bilmekte fayda var",
     "items": [

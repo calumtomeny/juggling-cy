@@ -347,6 +347,19 @@ if (svg) {
   wake();
 }
 
+// ---------- Around the island: drop happenings that have finished ----------
+
+// The page may have been built before an event ended, so hide it here too,
+// and the whole section once nothing is left.
+for (const el of document.querySelectorAll("[data-until]")) {
+  if (Date.parse(el.dataset.until) <= Date.now()) el.remove();
+}
+const eventsEl = document.querySelector("[data-events]");
+if (eventsEl && !eventsEl.querySelector("[data-until]")) {
+  eventsEl.remove();
+  document.querySelector("[data-events-link]")?.remove();
+}
+
 // ---------- Reveal sections as they scroll in ----------
 
 const reveals = document.querySelectorAll(".reveal");

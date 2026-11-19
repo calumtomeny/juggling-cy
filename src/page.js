@@ -2,6 +2,7 @@
 // result to index.html, el/index.html and tr/index.html for Vite to build.
 import { badgeSVG, markSVG, BALL_COLORS, COLORS } from "./badge.js";
 import { LANGS, DIRECTIONS, EMAIL, INSTAGRAM, VIDEO, PIN, TZ, START_HOUR, END_HOUR, RRULE, calendarEvent, icsFile, tuesdays, isoAt } from "./site.js";
+import { upcoming, soon } from "./events.js";
 
 const WEEKS_LISTED = 8;
 
@@ -47,6 +48,57 @@ function posterSVG() {
               <path d="M-100 1147.5Q800 -247.5 1700 1147.5"/>
               ${ball([416, 577], BALL_COLORS[0])}${ball([1064, 510], BALL_COLORS[2])}
             </svg>`;
+}
+
+// "Around the island": other happenings from src/events.js that haven't
+// finished yet. Nothing at all when there are none.
+function eventsSection(t, L) {
+  const list = upcoming();
+  if (!list.length) return "";
+  const part = (iso, opts) => new Intl.DateTimeFormat(L.locale, { timeZone: TZ, ...opts }).format(new Date(iso));
+  const items = list.map((e, i) => {
+    const x = e[L.code];
+    return `          <li class="event reveal" style="--i:${i}" data-until="${e.until}">
+            <time class="event-date" datetime="${e.start}">
+              <span>${esc(part(e.start, { weekday: "short" }))}</span>
+              <strong>${esc(part(e.start, { day: "numeric" }))}</strong>
+              <span>${esc(part(e.start, { month: "short" }))}</span>
+            </time>
+            <div class="event-copy">
+              <h3>${esc(x.title)}</h3>
+              <p class="event-by">${esc(e.by)}</p>
+              <p class="event-when">${esc(x.time)}<br>${esc(x.place)}</p>
+              <p>${esc(x.body)}</p>
+              <p class="event-note">${esc(x.note)}</p>
+              <div class="event-links">
+                <a class="btn btn-line btn-small" href="${esc(e.url)}">${esc(t.events.more)} ${ARROW_OUT}</a>
+                ${e.flyer ? `<a class="btn btn-line btn-small" href="${esc(e.flyer)}">${IG_ICON} ${esc(t.events.flyer)}</a>` : ""}
+              </div>
+            </div>
+          </li>`;
+  });
+  const tell = `<a href="mailto:${EMAIL}?subject=${encodeURIComponent("Event in Cyprus")}">${esc(t.events.tell)}</a>`;
+  return `
+    <section class="events" id="events" aria-labelledby="events-title" data-events>
+      <div class="wrap">
+        <h2 id="events-title" class="section-title reveal">${esc(t.events.title)}</h2>
+        <p class="events-intro reveal">${esc(t.events.intro).replace("{tell}", tell)}</p>
+        <ul class="event-list">
+${items.join("\n")}
+        </ul>
+      </div>
+    </section>
+`;
+}
+
+// A flag at the top of the page for a happening in the next fortnight,
+// pointing down to its card.
+function eventFlag(L) {
+  const e = soon();
+  if (!e) return "";
+  const date = new Intl.DateTimeFormat(L.locale, { timeZone: TZ, weekday: "short", day: "numeric", month: "short" }).format(new Date(e.start));
+  return `<a class="event-flag" href="#events" data-until="${e.until}"><span class="event-flag-date">${esc(date)}</span> <span>${esc(e[L.code].teaser)}</span> ${ARROW_DOWN}</a>
+        `;
 }
 
 function googleCalendar(e) {
@@ -274,6 +326,7 @@ ${jsonLd(t, lang, site)}
     <div class="bar wrap">
       <a class="brand" href="${home}">${markSVG({ attrs: 'class="brand-mark" aria-hidden="true"' })}<span>Juggling Cyprus</span></a>
       <nav class="bar-nav" aria-label="Juggling Cyprus">
+        ${upcoming().length ? `<a href="#events" data-events-link>${esc(t.events.title)}</a>` : ""}
         <a href="#good">${esc(t.nav.good)}</a>
         <a href="#find">${esc(t.nav.find)}</a>
       </nav>
@@ -282,7 +335,7 @@ ${jsonLd(t, lang, site)}
 
     <div class="hero-grid wrap">
       <div class="hero-copy">
-        <p class="kicker">${esc(t.hero.kicker)}</p>
+        ${eventFlag(L)}<p class="kicker">${esc(t.hero.kicker)}</p>
         <h1 class="when">
           <span class="sr">Juggling Cyprus: </span>
           <span class="day">${esc(t.hero.day)}</span>
@@ -380,7 +433,7 @@ ${t.newbie.steps
         </figure>
       </div>
     </section>
-
+${eventsSection(t, L)}
     <section class="good" id="good" aria-labelledby="good-title">
       <div class="wrap">
         <h2 id="good-title" class="section-title reveal">${esc(t.good.title)}</h2>
